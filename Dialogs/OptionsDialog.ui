@@ -144,6 +144,11 @@
         <widget class="QComboBox" name="ThemeCombobox">
          <item>
           <property name="text">
+           <string>System</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>Classic</string>
           </property>
          </item>

@@ -6,6 +6,7 @@ Thumbs.db
 /.vs
 /release
 /.qtc_clangd
+/build
 *.statsh
 Makefile
 *.Debug

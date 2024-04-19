@@ -12,6 +12,8 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QPushButton>
+#include <QApplication>
+#include <QStyleHints>
 
 #include "Enums.h"
 #include "Log.h"

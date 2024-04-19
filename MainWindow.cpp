@@ -106,6 +106,7 @@ MainWindow::MainWindow(QApplication* app) {
     QObject::connect(m_ui->ResetFiltersButton, SIGNAL(clicked()), this, SLOT(resetFilters()));
     QObject::connect(m_ui->MoviesListWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(customMenuRequested(QPoint)));
     QObject::connect(m_ui->QuickSearchLineEdit, SIGNAL(textChanged(QString)), this, SLOT(fillTable()));
+    QObject::connect(qApp->styleHints(), SIGNAL(colorSchemeChanged(Qt::ColorScheme)), this, SLOT(refreshTheme()));
 }
 
 MainWindow::~MainWindow() {
@@ -1425,6 +1426,12 @@ void MainWindow::refreshTheme() {
     QString path;
 
     switch((enum eTheme)Common::Settings->value("theme").toInt()) {
+        case eTheme::System:
+            if(qApp->styleHints()->colorScheme() == Qt::ColorScheme::Dark)
+                path = ":/styles/Styles/dark.qss";
+            else
+                path = ":/styles/Styles/classic.qss";
+            break;
         case eTheme::Classic:
             path = ":/styles/Styles/classic.qss";
             break;
@@ -1457,6 +1464,7 @@ void MainWindow::refreshTheme() {
                                      "stop: 0.75001 #014bff, stop: 0.875 #014bff,"
                                      "stop: 0.875001 #8a018c, stop: 1 #8a018c);");
     }
+
     Common::setIconAccordingToTheme(m_ui->ExportAct, "export.png");
     Common::setIconAccordingToTheme(m_ui->ImportAct, "import.png");
     Common::setIconAccordingToTheme(m_ui->QuitAct, "exit.png");

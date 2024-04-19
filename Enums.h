@@ -2,6 +2,7 @@
 #define ENUMS_H
 
 enum class eTheme {
+    System,
     Classic,
     Dark,
     OLED,

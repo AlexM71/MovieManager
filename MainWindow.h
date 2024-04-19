@@ -21,6 +21,7 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QCheckBox>
+#include <QStyleHints>
 
 #include <cmath>
 #include <ctime>
@@ -75,7 +76,6 @@ class MainWindow : public QMainWindow {
         void filterTable();
         void removeUnusedTags();
         void refreshLanguage();
-        void refreshTheme();
         void setMatrixMode(bool state);
         int getIndexOfMovie(int ID);
         int getIDOfMovie(int nIndex);
@@ -108,6 +108,7 @@ class MainWindow : public QMainWindow {
         void on_MoviesListWidget_cellDoubleClicked(int row, int column);
         void on_ManageMovieViewsButton_clicked();
         void CheckForUpdates(bool bManualTrigger = true);
+        void refreshTheme();
 
         void clickedTag(Tag* tag);
         void clickedFilterTag(Tag* tag);

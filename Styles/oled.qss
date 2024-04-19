@@ -25,15 +25,11 @@ QMenuBar {
 
 QMenuBar::item:selected {
     background: rgba(255, 255, 255, 50);
+    border-radius:6px;
 }
 
 QMenuBar::item:!selected {
     background-color: transparent;
-}
-
-QMenuBar::item:pressed {
-    color: #fff ;
-    background: rgba(255, 255, 255, 50);
 }
 
 QMenu {
@@ -180,9 +176,12 @@ QSpinBox:disabled, QDoubleSpinBox:disabled {
         border: 1px solid #bbb;
 }
 
-QTableWidget {
-    selection-background-color: #713a7a;
-    selection-color:#fff;
+QTableWidget::item {
+    background-color: rgba(0,0,0,0);
+}
+
+QTableWidget::item:selected {
+    background-color: #713a7a;
 }
 
 QHeaderView {

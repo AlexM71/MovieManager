@@ -127,6 +127,9 @@
       <layout class="QHBoxLayout" name="ViewTypeInputLayout" stretch="100,0">
        <item>
         <widget class="QComboBox" name="ViewTypeComboBox">
+         <property name="maxVisibleItems">
+          <number>12</number>
+         </property>
          <property name="frame">
           <bool>true</bool>
          </property>
@@ -279,7 +282,7 @@
            <second>0</second>
            <year>2022</year>
            <month>6</month>
-           <day>2</day>
+           <day>1</day>
           </datetime>
          </property>
          <property name="maximumDateTime">
@@ -299,7 +302,7 @@
            <second>0</second>
            <year>1899</year>
            <month>11</month>
-           <day>26</day>
+           <day>25</day>
           </datetime>
          </property>
          <property name="displayFormat">

@@ -234,6 +234,16 @@ bool Common::isThemeBright(enum eTheme eTheme)
 {
     switch(eTheme)
     {
+        case eTheme::System:
+            if(qApp != nullptr)
+            {
+                if(qApp->styleHints()->colorScheme() == Qt::ColorScheme::Dark)
+                    return false;
+               else
+                    return true;
+            }
+            else
+                return true;
         case eTheme::Dark:
         case eTheme::MidnightPurple:
         case eTheme::OLED:

@@ -1,6 +1,6 @@
 #ifndef BUILDFUNCTIONS_H
 #define BUILDFUNCTIONS_H
 
-//#define DEV
+#define DEV
 
 #endif // BUILDFUNCTIONS_H

@@ -1,3 +1,7 @@
+!versionAtLeast(QT_VERSION, 6.7.0) {
+    error("You need to use atleast Qt 6.7.0 (current: $${QT_VERSION})")
+}
+
 SOURCES += \
     Common.cpp \
     CustomColumnLineEdit.cpp \
