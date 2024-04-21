@@ -56,5 +56,7 @@
         <file>Assets/logo-wide.png</file>
         <file>Assets/Icons/Bright/download.png</file>
         <file>Assets/Icons/Dark/download.png</file>
+        <file>Assets/Icons/Bright/paypal.png</file>
+        <file>Assets/Icons/Dark/paypal.png</file>
     </qresource>
 </RCC>

@@ -409,6 +409,7 @@
      <string>Help</string>
     </property>
     <addaction name="whatsnewAct"/>
+    <addaction name="PayPalAct"/>
     <addaction name="CheckForUpdateAct"/>
     <addaction name="AboutAct"/>
     <addaction name="EasterEggAct"/>
@@ -533,6 +534,11 @@
   <action name="CheckForUpdateAct">
    <property name="text">
     <string>Check for updates</string>
+   </property>
+  </action>
+  <action name="PayPalAct">
+   <property name="text">
+    <string>Donate</string>
    </property>
   </action>
  </widget>

@@ -1363,6 +1363,7 @@ void MainWindow::menuBarConnectors() {
     QObject::connect(m_ui->ChartAct, SIGNAL(triggered()), this, SLOT(openCharts()));
     QObject::connect(m_ui->CalendarAct, SIGNAL(triggered()), this, SLOT(openCalendar()));
     QObject::connect(m_ui->CheckForUpdateAct, SIGNAL(triggered()), this, SLOT(CheckForUpdates()));
+    QObject::connect(m_ui->PayPalAct, SIGNAL(triggered()), this, SLOT(openPayPal()));
 }
 
 void MainWindow::on_EasterEggAct_triggered() {
@@ -1475,6 +1476,7 @@ void MainWindow::refreshTheme() {
     Common::setIconAccordingToTheme(m_ui->whatsnewAct, "github.png");
     Common::setIconAccordingToTheme(m_ui->AboutAct, "info.png");
     Common::setIconAccordingToTheme(m_ui->CheckForUpdateAct, "download.png");
+    Common::setIconAccordingToTheme(m_ui->PayPalAct, "paypal.png");
 }
 
 void MainWindow::fillGlobalStats() {
@@ -1702,4 +1704,9 @@ void MainWindow::CheckDatabaseVersion()
         sDatabaseVersion = "1.2.1";
         Common::Log->append(tr("Database Migrated from version 1.2.0 to 1.2.1"), eLog::Success);
     }
+}
+
+void MainWindow::openPayPal()
+{
+    QDesktopServices::openUrl(QUrl("https://paypal.me/AlexM71100", QUrl::TolerantMode));
 }

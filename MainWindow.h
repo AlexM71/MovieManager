@@ -109,6 +109,7 @@ class MainWindow : public QMainWindow {
         void on_ManageMovieViewsButton_clicked();
         void CheckForUpdates(bool bManualTrigger = true);
         void refreshTheme();
+        void openPayPal();
 
         void clickedTag(Tag* tag);
         void clickedFilterTag(Tag* tag);
