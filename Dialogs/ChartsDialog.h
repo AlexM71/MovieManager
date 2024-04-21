@@ -51,6 +51,8 @@ class ChartsDialog : public QDialog {
         QPieSeries* viewTypeSeries;
         QChart* viewTypeChart;
 
+        QHBoxLayout* chartLayout;
+
     public:
         explicit ChartsDialog(QWidget* parent = nullptr);
         static int instancesCount();

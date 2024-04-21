@@ -39,7 +39,11 @@ ChartsDialog::ChartsDialog(QWidget *parent) : QDialog(parent) {
 
     chartView->setRenderHint(QPainter::Antialiasing);
 
-    m_ui->ChartLayout->addWidget(chartView);
+    chartLayout = new QHBoxLayout();
+
+    m_ui->ChartWidget->setLayout(chartLayout);
+
+    m_ui->ChartWidget->layout()->addWidget(chartView);
 
     QObject::connect(m_ui->ChartSelector, SIGNAL(currentIndexChanged(int)), this, SLOT(setDisplayedChart(int)));
     //QObject::connect(movieYearSet, SIGNAL(hovered(bool,int)), this, SLOT());
@@ -67,6 +71,7 @@ ChartsDialog::~ChartsDialog() {
     // View Type
     //delete viewTypeSeries; // TODO : memory leak here, find a way to make it work
     delete viewTypeChart;
+    delete chartLayout;
 
     delete chartView;
 }
@@ -79,19 +84,23 @@ void ChartsDialog::setDisplayedChart(int nChart) {
 
     enum eChart eChart = (enum eChart)nChart;
     switch(eChart) {
-        case eChart::ViewedByMovieYear :
+        case eChart::ViewedByMovieYear:
+            chartView->setMinimumWidth(35 * movieYearSet->count());
             chartView->setChart(movieYearChart);
             break;
-        case eChart::ViewedByType :
+        case eChart::ViewedByType:
+            chartView->setMinimumWidth(0);
             chartView->setChart(viewTypeChart);
             break;
-        case eChart::ViewedByYear :
+        case eChart::ViewedByYear:
+            chartView->setMinimumWidth(35 * yearSet->count());
             chartView->setChart(yearChart);
             break;
     }
 }
 
 void ChartsDialog::setViewedByMovieYearChart() {
+
     sRequest = "SELECT ReleaseYear, count(*) FROM movies GROUP BY ReleaseYear;";
 
     QStringList categories;
@@ -108,7 +117,6 @@ void ChartsDialog::setViewedByMovieYearChart() {
             if(query.value(1).toInt() > maxValue)
                 maxValue = query.value(1).toInt();
         }
-
 
         movieYearSeries->append(movieYearSet);
 
@@ -133,6 +141,7 @@ void ChartsDialog::setViewedByMovieYearChart() {
 }
 
 void ChartsDialog::setViewedByTypeChart() {
+
     sRequest = "SELECT ViewType, count(*) FROM views GROUP BY ViewType";
 
     if(!query.exec(sRequest)) {
@@ -155,6 +164,7 @@ void ChartsDialog::setViewedByTypeChart() {
 }
 
 void ChartsDialog::setViewedByYearChart() {
+
     sRequest = "SELECT strftime('%Y', ViewDate) AS Year, count(*) FROM views WHERE ViewDate != '?' GROUP BY Year";
     QStringList categories;
     int maxValue = 0;
