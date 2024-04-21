@@ -761,156 +761,139 @@ void MainWindow::exportDB() {
 void MainWindow::addView(int nMovieID) {
     AddViewDialog* window = new AddViewDialog(this, nMovieID);
     window->show();
-    if(window->exec() == 1) {
-
+    if(window->exec() == 1)
+    {
         QString movieName;
         QString movieYear;
+        int nNewMovieID = -1;
 
-        //Add the new movie to the movies table
+        // Step 1: Add the new movie to the movies table if it's new
         if(window->IsSearchedMovieAnExistingMovie() == false) {
 
             movieName = window->getName();
             movieYear = QString::number(window->getReleaseYear());
 
-            bool movieAlreadyExist = false;
-            QSqlQuery existingMoviesQuery;
-            if(!existingMoviesQuery.exec("SELECT Name, ReleaseYear FROM movies")) {
-                Common::LogDatabaseError(&existingMoviesQuery);
+            QString posterPath = "";
+            if(window->getPosterPath() != "") {
+                QImage poster(window->getPosterPath());
+                if(poster.height() * poster.width() > 2000000) {
+                    Common::Log->append(tr("Selected poster is large (%1x%2). Latencies can be felt.").arg(QString::number(poster.width()), QString::number(poster.height())), eLog::Warning);
+                }
+
+                //Processing poster moving and renaming
+                QString ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
+                QString GUID = QString::number(QRandomGenerator::global()->generate());
+                if(QFile::copy(window->getPosterPath(), m_savepath + QDir::separator() + "Posters" + QDir::separator() + GUID + "." + ext) == false) {
+                    Common::Log->append(tr("Error while copying poster,\nOriginal path: %1\nDestination path: %2/Posters/%3.%4").arg(window->getPosterPath(), m_savepath, GUID, ext), eLog::Error);
+                }
+                posterPath = GUID+"."+ext;
+            }
+
+            // Creation of the request
+            QString sRequest = "INSERT INTO movies (Name, ReleaseYear, Rating, Poster";
+            for(int nColumn = 0; nColumn < window->getCustomColumnCount(); nColumn++) {
+                sRequest.append(", \"" + window->getCustomColumnInputAt(nColumn)->getLabel() + "\"");
+            }
+            sRequest.append(") VALUES (?,?,?,?");
+
+            for(int nColumn = 0; nColumn < window->getCustomColumnCount(); nColumn++) {
+                sRequest.append(",?");
+            }
+            sRequest.append(");");
+
+            QSqlQuery insertIntoMoviesQuery;
+            insertIntoMoviesQuery.prepare(sRequest);
+            insertIntoMoviesQuery.bindValue(0, window->getName());
+            insertIntoMoviesQuery.bindValue(1, window->getReleaseYear());
+            insertIntoMoviesQuery.bindValue(2, window->getRating());
+            insertIntoMoviesQuery.bindValue(3, posterPath);
+            for(int nColumn = 0; nColumn < window->getCustomColumnCount(); nColumn++) {
+                CustomColumnLineEdit* input = window->getCustomColumnInputAt(nColumn);
+                insertIntoMoviesQuery.bindValue(4 + nColumn, input->text());
+            }
+
+            if(!insertIntoMoviesQuery.exec()){
+                Common::Log->append(tr("Unable to insert the view (error 1)"), eLog::Error);
+                Common::LogDatabaseError(&insertIntoMoviesQuery);
                 return;
             }
-            while(existingMoviesQuery.next()) {
-                if(QString::compare(movieName, existingMoviesQuery.value(0).toString()) == 0 && QString::compare(movieYear, existingMoviesQuery.value(1).toString()) == 0) {
-                    movieAlreadyExist = true;
-                    QMessageBox::information(this, tr("Movie already exists"), tr("There is already a movie with this name and release year, the view will be added to this one"));
-                    break;
-                }
-            }
-            if(movieAlreadyExist == false) {
-                QString posterPath = "";
-                if(window->getPosterPath() != "") {
-                    QImage poster(window->getPosterPath());
-                    if(poster.height() * poster.width() > 2000000) {
-                        Common::Log->append(tr("Selected poster is large (%1x%2). Latencies can be felt.").arg(QString::number(poster.width()), QString::number(poster.height())), eLog::Warning);
-                    }
-
-                    //Processing poster moving and renaming
-                    QString ext = window->getPosterPath().remove(0, window->getPosterPath().lastIndexOf(".")+1);
-                    QString GUID = QString::number(QRandomGenerator::global()->generate());
-                    if(QFile::copy(window->getPosterPath(), m_savepath + QDir::separator() + "Posters" + QDir::separator() + GUID + "." + ext) == false) {
-                        Common::Log->append(tr("Error while copying poster,\nOriginal path: %1\nDestination path: %2/Posters/%3.%4").arg(window->getPosterPath(), m_savepath, GUID, ext), eLog::Error);
-                    }
-                    posterPath = GUID+"."+ext;
-                }
-
-                // Creation of the request
-                QString sRequest = "INSERT INTO movies (Name, ReleaseYear, Rating, Poster";
-                for(int nColumn = 0; nColumn < window->getCustomColumnCount(); nColumn++) {
-                    sRequest.append(", \"" + window->getCustomColumnInputAt(nColumn)->getLabel() + "\"");
-                }
-                sRequest.append(") VALUES (?,?,?,?");
-
-                for(int nColumn = 0; nColumn < window->getCustomColumnCount(); nColumn++) {
-                    sRequest.append(",?");
-                }
-                sRequest.append(");");
-
-                QSqlQuery insertIntoMoviesQuery;
-                insertIntoMoviesQuery.prepare(sRequest);
-
-                insertIntoMoviesQuery.bindValue(0, window->getName());
-                insertIntoMoviesQuery.bindValue(1, window->getReleaseYear());
-                insertIntoMoviesQuery.bindValue(2, window->getRating());
-                insertIntoMoviesQuery.bindValue(3, posterPath);
-                for(int nColumn = 0; nColumn < window->getCustomColumnCount(); nColumn++) {
-                    CustomColumnLineEdit* input = window->getCustomColumnInputAt(nColumn);
-                    insertIntoMoviesQuery.bindValue(4 + nColumn, input->text());
-                }
-
-                if(!insertIntoMoviesQuery.exec()){
-                    Common::LogDatabaseError(&insertIntoMoviesQuery);
-                    return;
-                }
-            }
+            nNewMovieID = insertIntoMoviesQuery.lastInsertId().toInt();
         }
         else {
             movieName = window->GetSearchedMovieText().remove(window->GetSearchedMovieText().length()-7, window->GetSearchedMovieText().length());
             movieYear = window->GetSearchedMovieText().remove(0, window->GetSearchedMovieText().length()-4);
+            QSqlQuery viewedMovieIDQuery;
+            if(!viewedMovieIDQuery.exec("SELECT ID FROM movies WHERE Name=\""+movieName+"\" AND ReleaseYear=\""+movieYear+"\"")) {
+                Common::Log->append(tr("Unable to insert the view (error 2)"), eLog::Error);
+                Common::LogDatabaseError(&viewedMovieIDQuery);
+                return;
+            }
+            viewedMovieIDQuery.first();
+            nNewMovieID = viewedMovieIDQuery.value(0).toInt();
         }
 
-        //Add the view to the views table
-        QSqlQuery insertIntoViewsQuery;
-        insertIntoViewsQuery.prepare("INSERT INTO views (ID_Movie, ViewDate, ViewType) VALUES (?,?,?);");
-
-
-        QSqlQuery viewedMovieIDQuery;
-        if(!viewedMovieIDQuery.exec("SELECT ID FROM movies WHERE Name=\""+movieName+"\" AND ReleaseYear=\""+movieYear+"\"")) {
-            Common::LogDatabaseError(&viewedMovieIDQuery);
+        // Security
+        if(nNewMovieID == -1)
+        {
+            Common::Log->append(tr("Unable to insert the view (error 3)"), eLog::Error);
             return;
         }
-        viewedMovieIDQuery.first();
 
-        int nNewMovie = viewedMovieIDQuery.value(0).toInt();
-
-        QString ViewDate;
-        enum eViewType ViewType;
-
-        if(window->isDateUnknown()) {
-            ViewDate = "?";
-        }
-        else {
-            ViewDate = window->getViewDate().toString("yyyy-MM-dd");
-        }
-
-        if(window->isTypeUnknown()) {
-            ViewType = eViewType::Unknown;
-        }
-        else {
-            ViewType = window->getViewType();
-        }
-
-        insertIntoViewsQuery.bindValue(0, nNewMovie);
-        insertIntoViewsQuery.bindValue(1, ViewDate);
-        insertIntoViewsQuery.bindValue(2, (int)ViewType);
+        // Step 2: Add the view to the views table
+        QSqlQuery insertIntoViewsQuery;
+        insertIntoViewsQuery.prepare("INSERT INTO views (ID_Movie, ViewDate, ViewType) VALUES (?,?,?);");
+        insertIntoViewsQuery.bindValue(0, nNewMovieID);
+        insertIntoViewsQuery.bindValue(1, window->isDateUnknown() ? "?" : window->getViewDate().toString("yyyy-MM-dd"));
+        insertIntoViewsQuery.bindValue(2, (int)(window->isTypeUnknown() ? eViewType::Unknown : window->getViewType()));
 
         if(!insertIntoViewsQuery.exec()){
+            Common::Log->append(tr("Unable to insert the view (error 4)"), eLog::Error);
             Common::LogDatabaseError(&insertIntoViewsQuery);
             return;
         }
 
+        // Step 3 : Add tags
         for(int i=0 ; i<window->getTags()->size() ; i++) {
             QString hexcolor = "";
+
+            // Generates a random color (unused for now)
             for(int j = 0 ; j < 6 ; j++) {
                 hexcolor.append(QString::number(rand() % 9));
             }
 
-            QSqlQuery insertIntoTagsInfoQuery;
+            // If the tag isn't already existing
+            if(window->GetTagsList().contains(window->getTags()->at(i)) == false)
+            {
+                QSqlQuery insertIntoTagsInfoQuery;
 
-            insertIntoTagsInfoQuery.prepare("INSERT INTO tagsInfo (Tag, Color) VALUES (?,?);");
-            insertIntoTagsInfoQuery.bindValue(0, window->getTags()->at(i));
-            insertIntoTagsInfoQuery.bindValue(1, hexcolor);
+                insertIntoTagsInfoQuery.prepare("INSERT INTO tagsInfo (Tag, Color) VALUES (?,?);");
+                insertIntoTagsInfoQuery.bindValue(0, window->getTags()->at(i));
+                insertIntoTagsInfoQuery.bindValue(1, hexcolor);
 
-            if(!insertIntoTagsInfoQuery.exec()){
-                Common::LogDatabaseError(&insertIntoTagsInfoQuery);
-                return;
+                if(!insertIntoTagsInfoQuery.exec()){
+                    Common::Log->append(tr("Unable to insert the view (error 5)"), eLog::Error);
+                    Common::LogDatabaseError(&insertIntoTagsInfoQuery);
+                }
             }
 
             QSqlQuery insertIntoTagsQuery;
-
             insertIntoTagsQuery.prepare("INSERT INTO tags (ID_Movie, Tag) VALUES (?,?);");
-            insertIntoTagsQuery.bindValue(0, nNewMovie);
+            insertIntoTagsQuery.bindValue(0, nNewMovieID);
             insertIntoTagsQuery.bindValue(1, window->getTags()->at(i));
 
             if(!insertIntoTagsQuery.exec()){
+                Common::Log->append(tr("Unable to insert the view (error 6)"), eLog::Error);
                 Common::LogDatabaseError(&insertIntoTagsQuery);
-                return;
             }
 
         }
+
+        // Step 4 : Update main window
         fillGlobalStats();
         fillTable();
         if(nMovieID == -1) {
-            m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(nNewMovie), 0);
-            fillMovieInfos(nNewMovie);
+            m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(nNewMovieID), 0);
+            fillMovieInfos(nNewMovieID);
         }
         else {
             m_ui->MoviesListWidget->setCurrentCell(getIndexOfMovie(nMovieID), 0);
