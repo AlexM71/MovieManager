@@ -9,6 +9,8 @@ CalendarDialog::CalendarDialog(QWidget *parent) : QDialog(parent) {
     m_ui->setupUi(this);
     this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/calendar.png"));
 
+    m_labels = new QList<QLabel*>;
+
     m_selectedDate = QDate::currentDate();
 
     setDisplay();
@@ -20,6 +22,10 @@ CalendarDialog::CalendarDialog(QWidget *parent) : QDialog(parent) {
 
 CalendarDialog::~CalendarDialog() {
     instances--;
+
+    deleteLabels();
+    delete m_labels;
+
     delete m_ui;
 }
 
@@ -72,6 +78,9 @@ void CalendarDialog::setData() {
             Common::LogDatabaseError(&movieInfos);
         movieInfos.first();
         QLabel* viewLabel = new QLabel(movieInfos.value(0).toString() + " - " + movieInfos.value(1).toString());
+        m_labels->append(viewLabel);
+        viewLabel->setMaximumWidth((this->width()/7) - (9*2));
+        viewLabel->setToolTip(movieInfos.value(0).toString() + " - " + movieInfos.value(1).toString());
         viewLabel->setFixedHeight(24);
         viewLabel->setProperty("class", "Calendar-view-class");
 
@@ -176,6 +185,7 @@ void CalendarDialog::previousButtonClicked() {
     }
     m_selectedDate.setDate(year, month, 1);
 
+    deleteLabels();
     setDisplay();
     setData();
 }
@@ -192,6 +202,26 @@ void CalendarDialog::nextButtonClicked() {
     }
     m_selectedDate.setDate(year, month, 1);
 
+    deleteLabels();
     setDisplay();
     setData();
+}
+
+void CalendarDialog::resizeEvent(QResizeEvent* event)
+{
+    QDialog::resizeEvent(event);
+    for(int nLabel = 0; nLabel < m_labels->size(); nLabel++)
+    {
+        m_labels->at(nLabel)->setMaximumWidth((this->width()/7) - (9*2));
+    }
+}
+
+void CalendarDialog::deleteLabels()
+{
+    for(int nLabel = m_labels->size() - 1; nLabel >= 0; nLabel--)
+    {
+        delete m_labels->at(nLabel);
+    }
+
+    m_labels->clear();
 }

@@ -37,7 +37,12 @@ class CalendarDialog : public QDialog
             tr("December")
         };
 
+        // List that contains every displayed labels
+        QList<QLabel*>* m_labels;
+
         static int instances;
+
+        void deleteLabels();
 
     public:
         explicit CalendarDialog(QWidget *parent = nullptr);
@@ -48,6 +53,7 @@ class CalendarDialog : public QDialog
         int getOffset();
 
         static int instancesCount();
+        void resizeEvent(QResizeEvent* event);
 
     public slots:
         void previousButtonClicked();
