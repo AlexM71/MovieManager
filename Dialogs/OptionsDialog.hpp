@@ -1,12 +1,12 @@
-#ifndef OPTIONSDIALOG_H
-#define OPTIONSDIALOG_H
+#ifndef OPTIONSDIALOG_HPP
+#define OPTIONSDIALOG_HPP
 
 #include <QDialog>
 #include <QSignalMapper>
 
-#include "Enums.h"
-#include "Common.h"
-#include "AddColumnDialog.h"
+#include "Enums.hpp"
+#include "Common.hpp"
+#include "AddColumnDialog.hpp"
 
 namespace Ui {
     class OptionsDialog;
@@ -39,4 +39,4 @@ class OptionsDialog : public QDialog
         void RemoveColumn(int nRow);
 };
 
-#endif // OPTIONSDIALOG_H
+#endif // OPTIONSDIALOG_HPP

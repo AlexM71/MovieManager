@@ -1,9 +1,9 @@
-#ifndef LOGDIALOG_H
-#define LOGDIALOG_H
+#ifndef LOGDIALOG_HPP
+#define LOGDIALOG_HPP
 
 #include <QDialog>
 
-#include "Common.h"
+#include "Common.hpp"
 
 namespace Ui {
 class LogDialog;
@@ -31,4 +31,4 @@ class LogDialog : public QDialog
 
 };
 
-#endif // LOGDIALOG_H
+#endif // LOGDIALOG_HPP

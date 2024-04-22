@@ -1,5 +1,5 @@
-#ifndef TAG_H
-#define TAG_H
+#ifndef TAG_HPP
+#define TAG_HPP
 
 #include <QLabel>
 
@@ -32,4 +32,4 @@ class Tag : public QLabel {
 
 };
 
-#endif // TAG_H
+#endif // TAG_HPP

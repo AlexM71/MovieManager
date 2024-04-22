@@ -1,11 +1,11 @@
-#ifndef ABOUTDIALOG_H
-#define ABOUTDIALOG_H
+#ifndef ABOUTDIALOG_HPP
+#define ABOUTDIALOG_HPP
 
 #include <QDialog>
 #include <QDesktopServices>
 #include <QtVersion>
 
-#include "Common.h"
+#include "Common.hpp"
 
 namespace Ui {
     class AboutDialog;
@@ -17,13 +17,13 @@ class AboutDialog : public QDialog
 
     private:
         Ui::AboutDialog* m_ui;
-        static int instances;
+        static short instances;
 
     public:
         explicit AboutDialog(QWidget *parent = nullptr);
         ~AboutDialog();
 
-        static int instancesCount();
+        static short instancesCount();
 
     public slots:
         void redirectGithub();
@@ -31,4 +31,4 @@ class AboutDialog : public QDialog
 
 };
 
-#endif // ABOUTDIALOG_H
+#endif // ABOUTDIALOG_HPP

@@ -24,27 +24,27 @@ SOURCES += \
     main.cpp
 
 HEADERS += \
-    BuildFunctions.h \
-    Common.h \
-    CustomColumnLineEdit.h \
-    Dialogs/AboutDialog.h \
-    Dialogs/AddColumnDialog.h \
-    Dialogs/AddViewDialog.h \
-    Dialogs/CalendarDialog.h \
-    Dialogs/ChangelogDialog.h \
-    Dialogs/ChartsDialog.h \
-    Dialogs/EditMovieDialog.h \
-    Dialogs/EditViewDialog.h \
-    Dialogs/EditViewsDialog.h \
-    Dialogs/FiltersDialog.h \
-    Dialogs/LogDialog.h \
-    Dialogs/OptionsDialog.h \
-    Enums.h \
-    Log.h \
-    MainWindow.h \
-    Structures.h \
-    Tag.h \
-    TagsScrollArea.h
+    BuildFunctions.hpp \
+    Common.hpp \
+    CustomColumnLineEdit.hpp \
+    Dialogs/AboutDialog.hpp \
+    Dialogs/AddColumnDialog.hpp \
+    Dialogs/AddViewDialog.hpp \
+    Dialogs/CalendarDialog.hpp \
+    Dialogs/ChangelogDialog.hpp \
+    Dialogs/ChartsDialog.hpp \
+    Dialogs/EditMovieDialog.hpp \
+    Dialogs/EditViewDialog.hpp \
+    Dialogs/EditViewsDialog.hpp \
+    Dialogs/FiltersDialog.hpp \
+    Dialogs/LogDialog.hpp \
+    Dialogs/OptionsDialog.hpp \
+    Enums.hpp \
+    Log.hpp \
+    MainWindow.hpp \
+    Structures.hpp \
+    Tag.hpp \
+    TagsScrollArea.hpp
 
 QT += widgets \
       sql \

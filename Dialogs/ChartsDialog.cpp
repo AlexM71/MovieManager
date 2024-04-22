@@ -1,4 +1,4 @@
-#include "ChartsDialog.h"
+#include "ChartsDialog.hpp"
 #include "ui_ChartsDialog.h"
 
 int ChartsDialog::instances = 0;

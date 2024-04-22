@@ -1,11 +1,11 @@
-#ifndef ADDCOLUMNDIALOG_H
-#define ADDCOLUMNDIALOG_H
+#ifndef ADDCOLUMNDIALOG_HPP
+#define ADDCOLUMNDIALOG_HPP
 
 #include <QDialog>
 #include <QPushButton>
 #include <QStringList>
-#include "Structures.h"
-#include "Common.h"
+#include "Structures.hpp"
+#include "Common.hpp"
 
 namespace Ui {
     class AddColumnDialog;
@@ -32,4 +32,4 @@ class AddColumnDialog : public QDialog
         void Validate();
 };
 
-#endif // ADDCOLUMNDIALOG_H
+#endif // ADDCOLUMNDIALOG_HPP

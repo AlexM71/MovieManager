@@ -1,4 +1,4 @@
-#include "FiltersDialog.h"
+#include "FiltersDialog.hpp"
 #include "ui_FiltersDialog.h"
 
 FiltersDialog::FiltersDialog(QString sRequest, QWidget *parent) : QDialog(parent) {

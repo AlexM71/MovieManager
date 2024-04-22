@@ -1,5 +1,5 @@
-#ifndef CALENDARDIALOG_H
-#define CALENDARDIALOG_H
+#ifndef CALENDARDIALOG_HPP
+#define CALENDARDIALOG_HPP
 
 #include <QDialog>
 #include <QDate>
@@ -8,7 +8,7 @@
 #include <QStringList>
 #include <QSqlQuery>
 
-#include "Common.h"
+#include "Common.hpp"
 
 namespace Ui {
     class CalendarDialog;
@@ -61,4 +61,4 @@ class CalendarDialog : public QDialog
 
 };
 
-#endif // CALENDARDIALOG_H
+#endif // CALENDARDIALOG_HPP

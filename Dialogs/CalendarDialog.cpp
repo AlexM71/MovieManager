@@ -1,4 +1,4 @@
-#include "CalendarDialog.h"
+#include "CalendarDialog.hpp"
 #include "ui_CalendarDialog.h"
 
 int CalendarDialog::instances = 0;

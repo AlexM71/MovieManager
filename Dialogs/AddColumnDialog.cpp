@@ -1,4 +1,4 @@
-#include "AddColumnDialog.h"
+#include "AddColumnDialog.hpp"
 #include "ui_AddColumnDialog.h"
 
 AddColumnDialog::AddColumnDialog(QWidget *parent, struct stColumn* stColumnToEdit) : QDialog(parent) {

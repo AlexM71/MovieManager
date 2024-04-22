@@ -1,4 +1,4 @@
-#include "Common.h"
+#include "Common.hpp"
 
 Log* Common::Log = new class Log();
 #ifdef DEV

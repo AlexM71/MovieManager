@@ -1,4 +1,4 @@
-#include "Tag.h"
+#include "Tag.hpp"
 
 Tag::Tag(QString label)
 {

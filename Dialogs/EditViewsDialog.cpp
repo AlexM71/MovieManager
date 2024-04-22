@@ -1,4 +1,4 @@
-#include "EditViewsDialog.h"
+#include "EditViewsDialog.hpp"
 #include "ui_EditViewsDialog.h"
 
 EditViewsDialog::EditViewsDialog(int* ID, QWidget* parent) : QDialog(parent) {

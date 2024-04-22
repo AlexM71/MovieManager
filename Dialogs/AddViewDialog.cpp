@@ -1,4 +1,4 @@
-#include "AddViewDialog.h"
+#include "AddViewDialog.hpp"
 #include "ui_AddViewDialog.h"
 
 AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {

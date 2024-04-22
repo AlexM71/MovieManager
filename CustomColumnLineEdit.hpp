@@ -1,11 +1,11 @@
-#ifndef CUSTOMCOLUMNLINEEDIT_H
-#define CUSTOMCOLUMNLINEEDIT_H
+#ifndef CUSTOMCOLUMNLINEEDIT_HPP
+#define CUSTOMCOLUMNLINEEDIT_HPP
 
 #include <QLineEdit>
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
 
-#include "Enums.h"
+#include "Enums.hpp"
 
 class CustomColumnLineEdit : public QLineEdit
 {
@@ -49,4 +49,4 @@ class CustomColumnLineEdit : public QLineEdit
         void CheckForOutline(QString sText);
 };
 
-#endif // CUSTOMCOLUMNLINEEDIT_H
+#endif // CUSTOMCOLUMNLINEEDIT_HPP

@@ -1,7 +1,7 @@
-#include "AboutDialog.h"
+#include "AboutDialog.hpp"
 #include "ui_AboutDialog.h"
 
-int AboutDialog::instances = 0;
+short AboutDialog::instances = 0;
 
 AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent) {
     instances++;
@@ -24,7 +24,7 @@ AboutDialog::~AboutDialog() {
     delete m_ui;
 }
 
-int AboutDialog::instancesCount() {
+short AboutDialog::instancesCount() {
     return instances;
 }
 

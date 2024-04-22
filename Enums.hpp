@@ -1,5 +1,5 @@
-#ifndef ENUMS_H
-#define ENUMS_H
+#ifndef ENUMS_HPP
+#define ENUMS_HPP
 
 enum class eTheme {
     System,
@@ -49,4 +49,4 @@ enum class eColumnType {
     Text = 2
 };
 
-#endif // ENUMS_H
+#endif // ENUMS_HPP

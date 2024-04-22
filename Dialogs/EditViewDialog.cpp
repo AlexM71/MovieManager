@@ -1,4 +1,4 @@
-#include "EditViewDialog.h"
+#include "EditViewDialog.hpp"
 #include "ui_EditViewDialog.h"
 
 EditViewDialog::EditViewDialog(QTableWidget* table, QWidget* parent) : QDialog(parent) {

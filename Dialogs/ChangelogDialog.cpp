@@ -1,4 +1,4 @@
-#include "ChangelogDialog.h"
+#include "ChangelogDialog.hpp"
 #include "ui_ChangelogDialog.h"
 
 int ChangelogDialog::m_instances = 0;

@@ -1,14 +1,14 @@
-#ifndef FILTERSDIALOG_H
-#define FILTERSDIALOG_H
+#ifndef FILTERSDIALOG_HPP
+#define FILTERSDIALOG_HPP
 
 #include <QDialog>
 #include <QDate>
 #include <QSqlQuery>
 #include <QComboBox>
 
-#include "Structures.h"
-#include "Common.h"
-#include "CustomColumnLineEdit.h"
+#include "Structures.hpp"
+#include "Common.hpp"
+#include "CustomColumnLineEdit.hpp"
 
 enum class eCombobox {
     None,
@@ -54,4 +54,4 @@ class FiltersDialog : public QDialog
         QList<FilterComboBox*> m_filters;
 };
 
-#endif // FILTERSDIALOG_H
+#endif // FILTERSDIALOG_HPP

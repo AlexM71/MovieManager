@@ -1,5 +1,5 @@
-#ifndef CHARTSDIALOG_H
-#define CHARTSDIALOG_H
+#ifndef CHARTSDIALOG_HPP
+#define CHARTSDIALOG_HPP
 
 #include <QDialog>
 #include <QSqlQuery>
@@ -13,8 +13,8 @@
 #include <QChartView>
 #include <QPieSeries>
 
-#include "Enums.h"
-#include "Common.h"
+#include "Enums.hpp"
+#include "Common.hpp"
 #include "qsqlerror.h"
 
 namespace Ui {
@@ -69,4 +69,4 @@ class ChartsDialog : public QDialog {
 
 };
 
-#endif // CHARTSDIALOG_H
+#endif // CHARTSDIALOG_HPP

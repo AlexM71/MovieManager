@@ -1,4 +1,4 @@
-#include "TagsScrollArea.h"
+#include "TagsScrollArea.hpp"
 
 TagsScrollArea::TagsScrollArea(QWidget* parent) {
     QWidget* TagsWidget = new QWidget();

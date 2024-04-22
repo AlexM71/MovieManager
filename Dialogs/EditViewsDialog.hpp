@@ -1,5 +1,5 @@
-#ifndef EDITVIEWSDIALOG_H
-#define EDITVIEWSDIALOG_H
+#ifndef EDITVIEWSDIALOG_HPP
+#define EDITVIEWSDIALOG_HPP
 
 #include <QDialog>
 #include <QTableWidget>
@@ -8,8 +8,8 @@
 #include <QPushButton>
 #include <QMenu>
 
-#include "Enums.h"
-#include "EditViewDialog.h"
+#include "Enums.hpp"
+#include "EditViewDialog.hpp"
 
 namespace Ui {
 class EditViewsDialog;
@@ -40,4 +40,4 @@ class EditViewsDialog : public QDialog
 
 };
 
-#endif // EDITVIEWSDIALOG_H
+#endif // EDITVIEWSDIALOG_HPP

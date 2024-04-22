@@ -1,8 +1,8 @@
-#ifndef STRUCTURES_H
-#define STRUCTURES_H
+#ifndef STRUCTURES_HPP
+#define STRUCTURES_HPP
 
 #include <QString>
-#include <Enums.h>
+#include <Enums.hpp>
 
 struct stLogElement {
     QString sText;
@@ -27,4 +27,4 @@ struct stColumn {
     bool bOptional;
 };
 
-#endif // STRUCTURES_H
+#endif // STRUCTURES_HPP

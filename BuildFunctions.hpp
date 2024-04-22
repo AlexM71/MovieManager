@@ -1,0 +1,6 @@
+#ifndef BUILDFUNCTIONS_HPP
+#define BUILDFUNCTIONS_HPP
+
+#define DEV
+
+#endif // BUILDFUNCTIONS_HPP

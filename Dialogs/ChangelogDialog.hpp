@@ -1,5 +1,5 @@
-#ifndef CHANGELOGDIALOG_H
-#define CHANGELOGDIALOG_H
+#ifndef CHANGELOGDIALOG_HPP
+#define CHANGELOGDIALOG_HPP
 
 #include <QDialog>
 #include <QFile>
@@ -28,4 +28,4 @@ class ChangelogDialog : public QDialog
 
 };
 
-#endif // CHANGELOGDIALOG_H
+#endif // CHANGELOGDIALOG_HPP

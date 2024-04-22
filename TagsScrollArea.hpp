@@ -1,5 +1,5 @@
-#ifndef TAGSSCROLLAREA_H
-#define TAGSSCROLLAREA_H
+#ifndef TAGSSCROLLAREA_HPP
+#define TAGSSCROLLAREA_HPP
 
 #include <QScrollArea>
 #include <QHBoxLayout>
@@ -9,4 +9,4 @@ class TagsScrollArea : public QScrollArea {
         TagsScrollArea(QWidget* parent = nullptr);
 };
 
-#endif // TAGSSCROLLAREA_H
+#endif // TAGSSCROLLAREA_HPP

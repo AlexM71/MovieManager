@@ -1,4 +1,4 @@
-#include "CustomColumnLineEdit.h"
+#include "CustomColumnLineEdit.hpp"
 
 
 CustomColumnLineEdit::CustomColumnLineEdit(enum eColumnType eType)

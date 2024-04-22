@@ -1,12 +1,12 @@
-#ifndef EDITVIEWDIALOG_H
-#define EDITVIEWDIALOG_H
+#ifndef EDITVIEWDIALOG_HPP
+#define EDITVIEWDIALOG_HPP
 
 #include <QDialog>
 #include <QDate>
 #include <QTableWidget>
 
-#include "Common.h"
-#include "Enums.h"
+#include "Common.hpp"
+#include "Enums.hpp"
 
 namespace Ui {
     class EditViewDialog;
@@ -33,4 +33,4 @@ class EditViewDialog : public QDialog {
 
 };
 
-#endif // EDITVIEWDIALOG_H
+#endif // EDITVIEWDIALOG_HPP

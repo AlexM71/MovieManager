@@ -1,4 +1,4 @@
-#include "LogDialog.h"
+#include "LogDialog.hpp"
 #include "ui_LogDialog.h"
 
 int LogDialog::instances = 0;

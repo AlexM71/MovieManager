@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAINWINDOW_HPP
+#define MAINWINDOW_HPP
 
 #include <QMainWindow>
 #include <QSqlDatabase>
@@ -27,22 +27,22 @@
 #include <ctime>
 #include <iostream>
 
-#include "Common.h"
-#include "Enums.h"
-#include "Tag.h"
-#include "BuildFunctions.h"
-#include "TagsScrollArea.h"
+#include "Common.hpp"
+#include "Enums.hpp"
+#include "Tag.hpp"
+#include "BuildFunctions.hpp"
+#include "TagsScrollArea.hpp"
 
-#include "Dialogs/AddViewDialog.h"
-#include "Dialogs/EditViewsDialog.h"
-#include "Dialogs/FiltersDialog.h"
-#include "Dialogs/LogDialog.h"
-#include "Dialogs/AboutDialog.h"
-#include "Dialogs/OptionsDialog.h"
-#include "Dialogs/EditMovieDialog.h"
-#include "Dialogs/ChartsDialog.h"
-#include "Dialogs/ChangelogDialog.h"
-#include "Dialogs/CalendarDialog.h"
+#include "Dialogs/AddViewDialog.hpp"
+#include "Dialogs/EditViewsDialog.hpp"
+#include "Dialogs/FiltersDialog.hpp"
+#include "Dialogs/LogDialog.hpp"
+#include "Dialogs/AboutDialog.hpp"
+#include "Dialogs/OptionsDialog.hpp"
+#include "Dialogs/EditMovieDialog.hpp"
+#include "Dialogs/ChartsDialog.hpp"
+#include "Dialogs/ChangelogDialog.hpp"
+#include "Dialogs/CalendarDialog.hpp"
 
 namespace Ui {
     class MainWindow;
@@ -118,4 +118,4 @@ class MainWindow : public QMainWindow {
 
 };
 
-#endif // MAINWINDOW_H
+#endif // MAINWINDOW_HPP

@@ -1,5 +1,5 @@
-#ifndef EDITMOVIEDIALOG_H
-#define EDITMOVIEDIALOG_H
+#ifndef EDITMOVIEDIALOG_HPP
+#define EDITMOVIEDIALOG_HPP
 
 #include <QDialog>
 #include <QSqlQuery>
@@ -10,10 +10,10 @@
 #include <QKeyEvent>
 #include <QCompleter>
 
-#include "Common.h"
-#include "Tag.h"
-#include "TagsScrollArea.h"
-#include "CustomColumnLineEdit.h"
+#include "Common.hpp"
+#include "Tag.hpp"
+#include "TagsScrollArea.hpp"
+#include "CustomColumnLineEdit.hpp"
 
 namespace Ui {
 class EditMovieDialog;
@@ -65,4 +65,4 @@ class EditMovieDialog : public QDialog
 
 };
 
-#endif // EDITMOVIEDIALOG_H
+#endif // EDITMOVIEDIALOG_HPP

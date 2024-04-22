@@ -1,11 +1,11 @@
-#ifndef LOG_H
-#define LOG_H
+#ifndef LOG_HPP
+#define LOG_HPP
 
 #include <QList>
 #include <QObject>
 #include <QDate>
 #include <QTime>
-#include <Structures.h>
+#include <Structures.hpp>
 
 
 class Log : public QObject {
@@ -28,4 +28,4 @@ class Log : public QObject {
 
 };
 
-#endif // LOG_H
+#endif // LOG_HPP

@@ -1,4 +1,4 @@
-#include "EditMovieDialog.h"
+#include "EditMovieDialog.hpp"
 #include "ui_EditMovieDialog.h"
 
 EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) {

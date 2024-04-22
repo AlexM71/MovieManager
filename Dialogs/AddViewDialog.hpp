@@ -1,5 +1,5 @@
-#ifndef ADDVIEWDIALOG_H
-#define ADDVIEWDIALOG_H
+#ifndef ADDVIEWDIALOG_HPP
+#define ADDVIEWDIALOG_HPP
 
 #include <QDialog>
 #include <QSqlQuery>
@@ -10,10 +10,10 @@
 #include <QKeyEvent>
 #include <QCompleter>
 
-#include "Common.h"
-#include "Tag.h"
-#include "TagsScrollArea.h"
-#include "CustomColumnLineEdit.h"
+#include "Common.hpp"
+#include "Tag.hpp"
+#include "TagsScrollArea.hpp"
+#include "CustomColumnLineEdit.hpp"
 
 namespace Ui {
 class AddViewDialog;
@@ -71,4 +71,4 @@ class AddViewDialog : public QDialog
 
 };
 
-#endif // ADDVIEWDIALOG_H
+#endif // ADDVIEWDIALOG_HPP

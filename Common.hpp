@@ -1,5 +1,5 @@
-#ifndef COMMON_H
-#define COMMON_H
+#ifndef COMMON_HPP
+#define COMMON_HPP
 
 #include <QString>
 #include <QFileDialog>
@@ -15,9 +15,9 @@
 #include <QApplication>
 #include <QStyleHints>
 
-#include "Enums.h"
-#include "Log.h"
-#include "BuildFunctions.h"
+#include "Enums.hpp"
+#include "Log.hpp"
+#include "BuildFunctions.hpp"
 
 class Common
 {
@@ -50,4 +50,4 @@ public:
     static void LogDatabaseError(QSqlQuery *query);
 };
 
-#endif // COMMON_H
+#endif // COMMON_HPP
