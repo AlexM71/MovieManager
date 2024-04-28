@@ -1,11 +1,11 @@
 #include "EditViewDialog.hpp"
 #include "ui_EditViewDialog.h"
 
-EditViewDialog::EditViewDialog(QTableWidget* table, QWidget* parent) : QDialog(parent) {
-
+EditViewDialog::EditViewDialog(QTableWidget* table, QWidget* parent) : QDialog(parent)
+{
     m_ui = new Ui::EditViewDialog;
     m_ui->setupUi(this);
-    this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/edit.png"));
+    this->setWindowIcon(Common::GetIconAccordingToColorScheme(qApp->styleHints()->colorScheme(), "edit.png"));
 
     m_ui->ViewDateInput->setDate(QDate::currentDate());
     m_ui->ViewDateInput->setDisplayFormat(Common::Settings->value("dateFormat").toString());

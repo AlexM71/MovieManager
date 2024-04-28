@@ -1301,16 +1301,18 @@ void MainWindow::customMenuRequested(QPoint pos) {
     int nMovieID = m_ui->MoviesListWidget->item(m_ui->MoviesListWidget->currentRow(),2)->text().toInt();
     fillMovieInfos(nMovieID);
 
+    enum eTheme eTheme = (enum eTheme)Common::Settings->value("theme").toInt();
+
     QMenu *menu = new QMenu(this);
 
     QAction* addViewAction = new QAction(tr("Add a view"), this);
-    Common::setIconAccordingToTheme(addViewAction, "plus.png");
+    addViewAction->setIcon(Common::GetIconAccordingToTheme(eTheme, "plus.png"));
 
     QAction* editAction = new QAction(tr("Edit"), this);
-    Common::setIconAccordingToTheme(editAction, "edit.png");
+    editAction->setIcon(Common::GetIconAccordingToTheme(eTheme, "edit.png"));
 
     QAction* deleteAction = new QAction(tr("Remove"), this);
-    Common::setIconAccordingToTheme(deleteAction, "delete.png");
+    deleteAction->setIcon(Common::GetIconAccordingToTheme(eTheme, "delete.png"));
 
 
     menu->addAction(addViewAction);
@@ -1409,8 +1411,9 @@ void MainWindow::refreshLanguage() {
 
 void MainWindow::refreshTheme() {
     QString path;
+    enum eTheme eTheme = (enum eTheme)Common::Settings->value("theme").toInt();
 
-    switch((enum eTheme)Common::Settings->value("theme").toInt()) {
+    switch(eTheme) {
         case eTheme::System:
             if(qApp->styleHints()->colorScheme() == Qt::ColorScheme::Dark)
                 path = ":/styles/Styles/dark.qss";
@@ -1450,18 +1453,18 @@ void MainWindow::refreshTheme() {
                                      "stop: 0.875001 #8a018c, stop: 1 #8a018c);");
     }
 
-    Common::setIconAccordingToTheme(m_ui->ExportAct, "export.png");
-    Common::setIconAccordingToTheme(m_ui->ImportAct, "import.png");
-    Common::setIconAccordingToTheme(m_ui->QuitAct, "exit.png");
-    Common::setIconAccordingToTheme(m_ui->OptionsAct, "settings.png");
-    Common::setIconAccordingToTheme(m_ui->LogAct, "log.png");
-    Common::setIconAccordingToTheme(m_ui->ChartAct, "chart.png");
-    Common::setIconAccordingToTheme(m_ui->CalendarAct, "calendar.png");
-    Common::setIconAccordingToTheme(m_ui->whatsnewAct, "github.png");
-    Common::setIconAccordingToTheme(m_ui->AboutAct, "info.png");
-    Common::setIconAccordingToTheme(m_ui->CheckForUpdateAct, "download.png");
-    Common::setIconAccordingToTheme(m_ui->PayPalAct, "paypal.png");
-    Common::setIconAccordingToTheme(m_ui->MemoriesAct, "flashback.png");
+    m_ui->ExportAct->setIcon(Common::GetIconAccordingToTheme(eTheme, "export.png"));
+    m_ui->ImportAct->setIcon(Common::GetIconAccordingToTheme(eTheme, "import.png"));
+    m_ui->QuitAct->setIcon(Common::GetIconAccordingToTheme(eTheme, "exit.png"));
+    m_ui->OptionsAct->setIcon(Common::GetIconAccordingToTheme(eTheme, "settings.png"));
+    m_ui->LogAct->setIcon(Common::GetIconAccordingToTheme(eTheme, "log.png"));
+    m_ui->ChartAct->setIcon(Common::GetIconAccordingToTheme(eTheme, "chart.png"));
+    m_ui->CalendarAct->setIcon(Common::GetIconAccordingToTheme(eTheme, "calendar.png"));
+    m_ui->whatsnewAct->setIcon(Common::GetIconAccordingToTheme(eTheme, "github.png"));
+    m_ui->AboutAct->setIcon(Common::GetIconAccordingToTheme(eTheme, "info.png"));
+    m_ui->CheckForUpdateAct->setIcon(Common::GetIconAccordingToTheme(eTheme, "download.png"));
+    m_ui->PayPalAct->setIcon(Common::GetIconAccordingToTheme(eTheme, "paypal.png"));
+    m_ui->MemoriesAct->setIcon(Common::GetIconAccordingToTheme(eTheme, "flashback.png"));
 }
 
 void MainWindow::fillGlobalStats() {
@@ -1630,7 +1633,7 @@ void MainWindow::CheckForUpdates(bool bManualTrigger)
             {
                 QMessageBox messageBox;
                 messageBox.setWindowTitle("Check for updates");
-                messageBox.setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/download.png"));
+                messageBox.setWindowIcon(Common::GetIconAccordingToColorScheme(qApp->styleHints()->colorScheme(), "download.png"));
                 messageBox.setText(tr("A new version is available!\nLatest: %1\nCurrent: %2\n\nGo to the download page?").arg(sLatestVersion, sCurrentVersion));
                 messageBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                 messageBox.setDefaultButton(QMessageBox::Yes);
@@ -1646,7 +1649,7 @@ void MainWindow::CheckForUpdates(bool bManualTrigger)
                 {
                     QMessageBox messageBox;
                     messageBox.setWindowTitle("Check for updates");
-                    messageBox.setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/download.png"));
+                    messageBox.setWindowIcon(Common::GetIconAccordingToColorScheme(qApp->styleHints()->colorScheme(), "download.png"));
                     messageBox.setText(tr("MovieManager is up to date"));
                     messageBox.setStandardButtons(QMessageBox::Ok);
                     messageBox.setDefaultButton(QMessageBox::Ok);
@@ -1706,6 +1709,8 @@ void MainWindow::openMemories()
 
     if(window->result() == -1) {
         QMessageBox messageBox;
+        messageBox.setWindowTitle("Memories");
+        messageBox.setWindowIcon(Common::GetIconAccordingToColorScheme(qApp->styleHints()->colorScheme(), "flashback.png"));
         messageBox.setText(tr("No movie to display in Memories"));
         messageBox.setStandardButtons(QMessageBox::Ok);
         messageBox.setDefaultButton(QMessageBox::Ok);

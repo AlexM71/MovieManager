@@ -4,7 +4,7 @@
 FiltersDialog::FiltersDialog(QString sRequest, QWidget *parent) : QDialog(parent) {
     m_ui = new Ui::FiltersDialog;
     m_ui->setupUi(this);
-    this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/search.png"));
+    this->setWindowIcon(Common::GetIconAccordingToColorScheme(qApp->styleHints()->colorScheme(), "search.png"));
 
     CustomColumnLineEdit* LowReleaseYear = new CustomColumnLineEdit(eColumnType::Integer);
     LowReleaseYear->setLabel("ReleaseYear");

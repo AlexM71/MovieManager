@@ -7,7 +7,7 @@ CalendarDialog::CalendarDialog(QWidget *parent) : QDialog(parent) {
     instances++;
     m_ui = new Ui::CalendarDialog;
     m_ui->setupUi(this);
-    this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/calendar.png"));
+    this->setWindowIcon(Common::GetIconAccordingToColorScheme(qApp->styleHints()->colorScheme(), "calendar.png"));
 
     m_labels = new QList<QLabel*>;
 

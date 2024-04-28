@@ -7,7 +7,7 @@ EditMovieDialog::EditMovieDialog(QString ID, QWidget *parent) : QDialog(parent) 
     m_customColumnInputList = new QList<CustomColumnLineEdit*>;
     m_ui->setupUi(this);
     m_ID = &ID;
-    this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/edit.png"));
+    this->setWindowIcon(Common::GetIconAccordingToColorScheme(qApp->styleHints()->colorScheme(), "edit.png"));
     m_ui->TagsInput->installEventFilter(this);
 
     m_tagsScrollArea = new TagsScrollArea(this);

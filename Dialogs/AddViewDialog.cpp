@@ -6,7 +6,7 @@ AddViewDialog::AddViewDialog(QWidget *parent, int nMovieID) : QDialog(parent) {
     m_tags = new QList<QString>;
     m_customColumnInputList = new QList<CustomColumnLineEdit*>;
     m_ui->setupUi(this);
-    this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/plus.png"));
+    this->setWindowIcon(Common::GetIconAccordingToColorScheme(qApp->styleHints()->colorScheme(), "plus.png"));
     m_ui->TagsInput->installEventFilter(this);
 
     m_ui->MovieViewDateInput->setDate(QDate::currentDate());

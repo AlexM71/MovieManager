@@ -41,8 +41,8 @@ public:
 
     static QString ColumnTypeToQString(enum eColumnType type);
 
-    static void setIconAccordingToTheme(QAction* object, QString filename);
-    static void setIconAccordingToTheme(QPushButton* object, QString filename);
+    static QIcon GetIconAccordingToColorScheme(Qt::ColorScheme scheme, QString sIconFile);
+    static QIcon GetIconAccordingToTheme(enum eTheme theme, QString sIconFile);
     static bool isThemeBright(enum eTheme);
 
     static QString getVersion();

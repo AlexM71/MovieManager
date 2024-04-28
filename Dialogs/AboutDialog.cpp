@@ -7,7 +7,7 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent) {
     instances++;
     m_ui = new Ui::AboutDialog;
     m_ui->setupUi(this);
-    this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/info.png"));
+    this->setWindowIcon(Common::GetIconAccordingToColorScheme(qApp->styleHints()->colorScheme(), "info.png"));
 
     m_ui->QtVersionLabel->setText(tr("Powered by Qt %1").arg(qVersion()));
 #ifdef DEV

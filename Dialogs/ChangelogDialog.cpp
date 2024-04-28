@@ -7,7 +7,7 @@ ChangelogDialog::ChangelogDialog(QWidget *parent) : QDialog(parent) {
     m_instances++;
     m_ui = new Ui::ChangelogDialog;
     m_ui->setupUi(this);
-    this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/github.png"));
+    this->setWindowIcon(Common::GetIconAccordingToColorScheme(qApp->styleHints()->colorScheme(), "github.png"));
     loadHTML();
     //response = manager.get(QNetworkRequest(QUrl("https://github.com/AlexM71/MovieManager/commits/master")));
     //QObject::connect(response, SIGNAL(finished()), this, SLOT(loadHTML()));

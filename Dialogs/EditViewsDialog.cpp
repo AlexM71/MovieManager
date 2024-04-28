@@ -5,7 +5,7 @@ EditViewsDialog::EditViewsDialog(int* ID, QWidget* parent) : QDialog(parent) {
     m_ui = new Ui::EditViewsDialog;
     m_ui->setupUi(this);
     m_ID = ID;
-    this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/edit.png"));
+    this->setWindowIcon(Common::GetIconAccordingToColorScheme(qApp->styleHints()->colorScheme(), "edit.png"));
 
     m_ui->tableWidget->setColumnHidden(0, true);
 
@@ -70,10 +70,10 @@ void EditViewsDialog::customMenuRequested(QPoint pos) {
     QMenu *menu = new QMenu(this);
 
     QAction* editAction = new QAction(tr("Edit"), this);
-    Common::setIconAccordingToTheme(editAction, "edit");
+    editAction->setIcon(Common::GetIconAccordingToTheme((enum eTheme)Common::Settings->value("theme").toInt(), "edit.png"));
 
     QAction* deleteAction = new QAction(tr("Delete"), this);
-    Common::setIconAccordingToTheme(deleteAction, "delete.png");
+    deleteAction->setIcon(Common::GetIconAccordingToTheme((enum eTheme)Common::Settings->value("theme").toInt(), "delete.png"));
 
     menu->addAction(editAction);
     menu->addAction(deleteAction);

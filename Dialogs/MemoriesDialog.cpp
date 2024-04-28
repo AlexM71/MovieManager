@@ -8,7 +8,7 @@
 MemoriesDialog::MemoriesDialog(QString sSavePath, QWidget *parent) : QDialog(parent)
 {
     this->m_ui = new Ui::Memories;
-    this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/flashback.png"));
+    this->setWindowIcon(Common::GetIconAccordingToColorScheme(qApp->styleHints()->colorScheme(), "flashback.png"));
     m_ui->setupUi(this);
     m_movies = new QList<stMovie>;
     m_sSavePath = sSavePath;

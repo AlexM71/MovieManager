@@ -4,7 +4,7 @@
 OptionsDialog::OptionsDialog(QWidget *parent) : QDialog(parent) {
     m_ui = new Ui::OptionsDialog;
     m_ui->setupUi(this);
-    this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/settings.png"));
+    this->setWindowIcon(Common::GetIconAccordingToColorScheme(qApp->styleHints()->colorScheme(), "settings.png"));
 
     pPreviousWidget = m_ui->RatingButton;
 
@@ -127,7 +127,7 @@ void OptionsDialog::InsertColumnQt(QString sName, enum eColumnType eType, int nR
     QLabel* TypeLabel = new QLabel(Common::ColumnTypeToQString(eType));
     QPushButton* editButton = new QPushButton(tr("Edit"));
     QPushButton* deleteButton = new QPushButton();
-    Common::setIconAccordingToTheme(deleteButton, "delete.png");
+    deleteButton->setIcon(Common::GetIconAccordingToTheme((enum eTheme)Common::Settings->value("theme").toInt(), "delete.png"));
     deleteButton->setStyleSheet("min-width: 0px;");
     deleteButton->setMaximumWidth(30);
 

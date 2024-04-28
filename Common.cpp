@@ -212,22 +212,20 @@ QString Common::ColumnTypeToQString(enum eColumnType type) {
     }
 }
 
-void Common::setIconAccordingToTheme(QAction* action, QString filename) {
-    if(isThemeBright((enum eTheme)Common::Settings->value("theme").toInt())) {
-        action->setIcon(QIcon(":/assets/Assets/Icons/Dark/"+filename));
-    }
-    else {
-        action->setIcon(QIcon(":/assets/Assets/Icons/Bright/"+filename));
-    }
+QIcon Common::GetIconAccordingToColorScheme(Qt::ColorScheme scheme, QString sIconFile)
+{
+    if(scheme == Qt::ColorScheme::Light)
+        return QIcon(":/assets/Assets/Icons/Dark/" + sIconFile);
+    else
+        return QIcon(":/assets/Assets/Icons/Bright/" + sIconFile);
 }
 
-void Common::setIconAccordingToTheme(QPushButton* action, QString filename) {
-    if(isThemeBright((enum eTheme)Common::Settings->value("theme").toInt())) {
-        action->setIcon(QIcon(":/assets/Assets/Icons/Dark/"+filename));
-    }
-    else {
-        action->setIcon(QIcon(":/assets/Assets/Icons/Bright/"+filename));
-    }
+QIcon Common::GetIconAccordingToTheme(enum eTheme theme, QString sIconFile)
+{
+    if(isThemeBright(theme) == true)
+        return QIcon(":/assets/Assets/Icons/Dark/" + sIconFile);
+    else
+        return QIcon(":/assets/Assets/Icons/Bright/" + sIconFile);
 }
 
 bool Common::isThemeBright(enum eTheme eTheme)

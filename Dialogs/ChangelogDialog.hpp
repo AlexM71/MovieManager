@@ -5,6 +5,8 @@
 #include <QFile>
 #include <QLabel>
 
+#include "Common.hpp"
+
 namespace Ui {
     class ChangelogDialog;
 }

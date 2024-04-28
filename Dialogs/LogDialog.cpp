@@ -7,7 +7,7 @@ LogDialog::LogDialog(QWidget *parent) : QDialog(parent) {
     instances++;
     m_ui = new Ui::LogDialog;
     m_ui->setupUi(this);
-    this->setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/log.png"));
+    this->setWindowIcon(Common::GetIconAccordingToColorScheme(qApp->styleHints()->colorScheme(), "log.png"));
 
     fillList();
     QObject::connect(Common::Log, SIGNAL(logAppended()), this, SLOT(refresh()));
