@@ -16,6 +16,7 @@ SOURCES += \
     Dialogs/EditViewsDialog.cpp \
     Dialogs/FiltersDialog.cpp \
     Dialogs/LogDialog.cpp \
+    Dialogs/MemoriesDialog.cpp \
     Dialogs/OptionsDialog.cpp \
     Log.cpp \
     MainWindow.cpp \
@@ -38,6 +39,7 @@ HEADERS += \
     Dialogs/EditViewsDialog.hpp \
     Dialogs/FiltersDialog.hpp \
     Dialogs/LogDialog.hpp \
+    Dialogs/MemoriesDialog.hpp \
     Dialogs/OptionsDialog.hpp \
     Enums.hpp \
     Log.hpp \
@@ -64,6 +66,7 @@ FORMS += \
     Dialogs/EditViewsDialog.ui \
     Dialogs/FiltersDialog.ui \
     Dialogs/LogDialog.ui \
+    Dialogs/MemoriesDialog.ui \
     Dialogs/OptionsDialog.ui \
     MainWindow.ui
 

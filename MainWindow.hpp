@@ -43,6 +43,7 @@
 #include "Dialogs/ChartsDialog.hpp"
 #include "Dialogs/ChangelogDialog.hpp"
 #include "Dialogs/CalendarDialog.hpp"
+#include "Dialogs/MemoriesDialog.hpp"
 
 namespace Ui {
     class MainWindow;
@@ -110,6 +111,7 @@ class MainWindow : public QMainWindow {
         void CheckForUpdates(bool bManualTrigger = true);
         void refreshTheme();
         void openPayPal();
+        void openMemories();
 
         void clickedTag(Tag* tag);
         void clickedFilterTag(Tag* tag);

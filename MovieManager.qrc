@@ -58,5 +58,7 @@
         <file>Assets/Icons/Dark/download.png</file>
         <file>Assets/Icons/Bright/paypal.png</file>
         <file>Assets/Icons/Dark/paypal.png</file>
+        <file>Assets/Icons/Bright/flashback.png</file>
+        <file>Assets/Icons/Dark/flashback.png</file>
     </qresource>
 </RCC>

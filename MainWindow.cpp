@@ -1347,6 +1347,7 @@ void MainWindow::menuBarConnectors() {
     QObject::connect(m_ui->CalendarAct, SIGNAL(triggered()), this, SLOT(openCalendar()));
     QObject::connect(m_ui->CheckForUpdateAct, SIGNAL(triggered()), this, SLOT(CheckForUpdates()));
     QObject::connect(m_ui->PayPalAct, SIGNAL(triggered()), this, SLOT(openPayPal()));
+    QObject::connect(m_ui->MemoriesAct, SIGNAL(triggered()), this, SLOT(openMemories()));
 }
 
 void MainWindow::on_EasterEggAct_triggered() {
@@ -1460,6 +1461,7 @@ void MainWindow::refreshTheme() {
     Common::setIconAccordingToTheme(m_ui->AboutAct, "info.png");
     Common::setIconAccordingToTheme(m_ui->CheckForUpdateAct, "download.png");
     Common::setIconAccordingToTheme(m_ui->PayPalAct, "paypal.png");
+    Common::setIconAccordingToTheme(m_ui->MemoriesAct, "flashback.png");
 }
 
 void MainWindow::fillGlobalStats() {
@@ -1692,4 +1694,19 @@ void MainWindow::CheckDatabaseVersion()
 void MainWindow::openPayPal()
 {
     QDesktopServices::openUrl(QUrl("https://paypal.me/AlexM71100", QUrl::TolerantMode));
+}
+
+void MainWindow::openMemories()
+{
+    MemoriesDialog* window = new MemoriesDialog(m_savepath, this);
+
+    if(window->result() == -1) {
+        QMessageBox messageBox;
+        messageBox.setText(tr("No movie to display in Memories"));
+        messageBox.setStandardButtons(QMessageBox::Ok);
+        messageBox.setDefaultButton(QMessageBox::Ok);
+        messageBox.setIcon(QMessageBox::Information);
+        messageBox.exec();
+    }
+    delete window;
 }

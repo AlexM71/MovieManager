@@ -421,6 +421,7 @@
     <addaction name="LogAct"/>
     <addaction name="ChartAct"/>
     <addaction name="CalendarAct"/>
+    <addaction name="MemoriesAct"/>
    </widget>
    <widget class="QMenu" name="EditMenu">
     <property name="title">
@@ -539,6 +540,11 @@
   <action name="PayPalAct">
    <property name="text">
     <string>Donate</string>
+   </property>
+  </action>
+  <action name="MemoriesAct">
+   <property name="text">
+    <string>Memories</string>
    </property>
   </action>
  </widget>
