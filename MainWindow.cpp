@@ -1629,6 +1629,8 @@ void MainWindow::CheckForUpdates(bool bManualTrigger)
             if(QString::compare(sCurrentVersion, sLatestVersion) != 0)
             {
                 QMessageBox messageBox;
+                messageBox.setWindowTitle("Check for updates");
+                messageBox.setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/download.png"));
                 messageBox.setText(tr("A new version is available!\nLatest: %1\nCurrent: %2\n\nGo to the download page?").arg(sLatestVersion, sCurrentVersion));
                 messageBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
                 messageBox.setDefaultButton(QMessageBox::Yes);
@@ -1643,6 +1645,8 @@ void MainWindow::CheckForUpdates(bool bManualTrigger)
                 if(bManualTrigger == true)
                 {
                     QMessageBox messageBox;
+                    messageBox.setWindowTitle("Check for updates");
+                    messageBox.setWindowIcon(QIcon(":/assets/Assets/Icons/Dark/download.png"));
                     messageBox.setText(tr("MovieManager is up to date"));
                     messageBox.setStandardButtons(QMessageBox::Ok);
                     messageBox.setDefaultButton(QMessageBox::Ok);
