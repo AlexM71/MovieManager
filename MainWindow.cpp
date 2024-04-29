@@ -111,6 +111,8 @@ MainWindow::MainWindow(QApplication* app) {
 
 MainWindow::~MainWindow() {
     delete m_ui;
+    delete m_selectedTagsScrollArea;
+    delete m_movieTagsScrollArea;
 }
 
 void MainWindow::closeEvent([[maybe_unused]] QCloseEvent* event ) {
@@ -900,6 +902,7 @@ void MainWindow::addView(int nMovieID) {
             fillMovieInfos(nMovieID);
         }
     }
+    delete window;
 }
 
 void MainWindow::editViews(int nMovieID) {
@@ -919,6 +922,7 @@ void MainWindow::editViews(int nMovieID) {
             fillGlobalStats();
         }
     }
+    delete window;
 }
 
 void MainWindow::editMovie(int nMovieID) {
@@ -1072,6 +1076,7 @@ void MainWindow::editMovie(int nMovieID) {
         fillMovieInfos(nMovieID);
 
     }
+    delete window;
 }
 
 void MainWindow::deleteMovieConfirmation(int nMovieID) {
@@ -1132,10 +1137,9 @@ void MainWindow::openFilters() {
 
         m_customColumnsRequestFilter = window->FiltersToSQLRequest();
 
-        delete window;
-
         fillTable();
     }
+    delete window;
 }
 
 void MainWindow::openLog() {
@@ -1143,8 +1147,9 @@ void MainWindow::openLog() {
         LogDialog* window = new LogDialog(this);
         window->show();
         if(window->exec() == 0) {
-            delete window;
+
         }
+        delete window;
     }
     else {
         Common::Log->append(tr("Log already open"), eLog::Warning);
@@ -1156,8 +1161,9 @@ void MainWindow::openAbout() {
         AboutDialog* window = new AboutDialog(this);
         window->show();
         if(window->exec() == 0) {
-            delete window;
+
         }
+        delete window;
     }
     else {
         Common::Log->append(tr("About window already open"), eLog::Warning);
@@ -1169,8 +1175,9 @@ void MainWindow::on_whatsnewAct_triggered() {
         ChangelogDialog* window = new ChangelogDialog(this);
         window->show();
         if(window->exec() == 0) {
-            delete window;
+
         }
+        delete window;
     }
     else {
         Common::Log->append(tr("News window already open"), eLog::Warning);
@@ -1181,7 +1188,6 @@ void MainWindow::openSettings() {
     OptionsDialog* window = new OptionsDialog(this);
     window->show();
     if(window->exec() == 1) {
-        delete window;
         refreshLanguage();
         refreshTheme();
         fillTable();
@@ -1285,6 +1291,7 @@ void MainWindow::openSettings() {
         }
 
     }
+    delete window;
     m_ui->DisplayedMovieCountLabel->setText(tr("Movies: %1").arg(QString::number(m_ui->MoviesListWidget->rowCount())));
 }
 
@@ -1527,8 +1534,9 @@ void MainWindow::openCharts() {
         ChartsDialog* window = new ChartsDialog(this);
         window->show();
         if(window->exec() == 0) {
-            delete window;
+
         }
+        delete window;
     }
     else {
         Common::Log->append(tr("Charts window already open"), eLog::Warning);
@@ -1540,8 +1548,8 @@ void MainWindow::openCalendar() {
         CalendarDialog* window = new CalendarDialog(this);
         window->show();
         if(window->exec() == 0) {
-            delete window;
         }
+        delete window;
     }
     else {
         Common::Log->append(tr("Calendar already open"), eLog::Warning);

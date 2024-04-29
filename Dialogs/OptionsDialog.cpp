@@ -57,6 +57,7 @@ void OptionsDialog::AddColumn() {
     if(window->exec() == 1) {
         InsertColumn(window->getColumn(), m_ui->DefaultColumnGridLayout->rowCount());
     }
+    delete window;
 }
 
 void OptionsDialog::EditColumn(int nRow) {

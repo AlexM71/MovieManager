@@ -124,4 +124,5 @@ void EditViewsDialog::editView() {
         fillTable();
         m_edited = true;
     }
+    delete window;
 }
