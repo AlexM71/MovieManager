@@ -85,9 +85,10 @@ QPixmap MemoriesDialog::ResizeImage(int* nOffsetX, int* nOffsetY, int nIndex)
 {
     QPixmap pixmap;
 
-    QString sPath = m_sSavePath + QDir::separator() + "Posters" + QDir::separator() + m_movies->at(nIndex).sPosterPath;
-
-    pixmap.load(sPath);
+    if(m_movies->at(nIndex).sPosterPath == "")
+        pixmap.load(":/assets/Assets/nocover.png");
+    else
+        pixmap.load(m_sSavePath + QDir::separator() + "Posters" + QDir::separator() + m_movies->at(nIndex).sPosterPath);
 
     if((float)pixmap.height()/(float)pixmap.width() > (float)this->height()/(float)this->width())
     {
