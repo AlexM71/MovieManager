@@ -1449,7 +1449,7 @@ void MainWindow::refreshTheme() {
     // Pride month
     if(QDate::currentDate().month() == 6)
     {
-        m_ui->menubar->setStyleSheet("border-bottom: 3px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,"
+        m_ui->menubar->setStyleSheet("border-bottom: 4px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,"
                                      "stop: 0.125 #000000,"
                                      "stop: 0.125001 #784f17,stop: 0.25 #784f17,"
                                      "stop: 0.25001 #fe0000,stop: 0.375 #fe0000,"
