@@ -574,14 +574,35 @@ void MainWindow::removeUnusedTags() {
 
 }
 
-void MainWindow::importDB() {
+void MainWindow::importDB()
+{
     QString file = QFileDialog::getOpenFileName(this, tr("Import"), QString(), tr("JSON (*.json)"));
+
+    if(file.length() == 0)
+        return;
+
+    if(QString::compare(file.split(".").last(), "json", Qt::CaseInsensitive) != 0)
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Specified file is not a JSON file"));
+        return;
+    }
+
     QFile jsonFile(file);
     //Test if the file is correctly opened
     if (!jsonFile.open(QIODevice::ReadOnly)) {
         QMessageBox::critical(this, tr("Error"), jsonFile.errorString());
     }
     else {
+        QString val = jsonFile.readAll();
+        jsonFile.close();
+        QJsonParseError error;
+        QJsonObject main = QJsonDocument::fromJson(val.toUtf8(), &error).object();
+        if(error.error != QJsonParseError::ParseError::NoError)
+        {
+            QMessageBox::critical(this, tr("Error"), tr("Invalid JSON: %1").arg(error.errorString()));
+            return;
+        }
+
         int answer = QMessageBox::question(this, tr("Import"), tr("This operation will remove all actual views, do you want to continue?"));
         if (answer == QMessageBox::Yes) {
 
@@ -595,9 +616,6 @@ void MainWindow::importDB() {
             if(!deleteQuery.exec("DELETE FROM tagsInfo"))
                 Common::LogDatabaseError(&deleteQuery);
 
-            QString val = jsonFile.readAll();
-            jsonFile.close();
-            QJsonObject main = QJsonDocument::fromJson(val.toUtf8()).object();
             foreach(const QString& mainKey, main.keys()) {
                 if(mainKey == "movies") {
                     QJsonObject movies = main.value(mainKey).toObject();
@@ -667,9 +685,19 @@ void MainWindow::importDB() {
     fillGlobalStats();
 }
 
-void MainWindow::exportDB() {
-    int i;
+void MainWindow::exportDB()
+{
     QString file = QFileDialog::getSaveFileName(this, tr("Export"), QString(), tr("JSON (*.json)"));  //Get the save link
+
+    if(file.length() == 0)
+        return;
+
+    if(QString::compare(file.split(".").last(), "json", Qt::CaseInsensitive) != 0)
+    {
+        QMessageBox::critical(this, tr("Error"), tr("Specified file is not a JSON file"));
+        return;
+    }
+
     //Creates a QFile with the fetched path
     QFile jsonFile(file);
     //Test if the file is correctly opened
@@ -684,7 +712,7 @@ void MainWindow::exportDB() {
     QSqlQuery moviesQuery;
     if(!moviesQuery.exec("SELECT ID, Name, ReleaseYear, Rating, Poster FROM movies;"))
         Common::LogDatabaseError(&moviesQuery);
-    i=0;
+    int i=0;
     while(moviesQuery.next()) {
         i++;
 
@@ -696,7 +724,7 @@ void MainWindow::exportDB() {
         movieObject.insert("Rating", QJsonValue::fromVariant(moviesQuery.value(3).toInt()));
         movieObject.insert("Poster", QJsonValue::fromVariant(moviesQuery.value(4).toString()));
 
-        moviesObject.insert("movie" + QString::fromStdString(std::to_string(i)), movieObject);
+        moviesObject.insert("movie" + QString::number(i), movieObject);
     }
     mainObject.insert("movies", moviesObject);
 
@@ -716,7 +744,7 @@ void MainWindow::exportDB() {
         viewObject.insert("ViewDate", QJsonValue::fromVariant(viewsQuery.value(2).toString()));
         viewObject.insert("ViewType", QJsonValue::fromVariant(viewsQuery.value(3).toString()));
 
-        viewsObject.insert("view" + QString::fromStdString(std::to_string(i)), viewObject);
+        viewsObject.insert("view" + QString::number(i), viewObject);
     }
     mainObject.insert("views", viewsObject);
 
@@ -734,7 +762,7 @@ void MainWindow::exportDB() {
         tagInfoObject.insert("Tag", QJsonValue::fromVariant(tagsInfoQuery.value(0).toString()));
         tagInfoObject.insert("Color", QJsonValue::fromVariant(tagsInfoQuery.value(1).toString()));
 
-        tagsInfoObject.insert("tagInfo" + QString::fromStdString(std::to_string(i)), tagInfoObject);
+        tagsInfoObject.insert("tagInfo" + QString::number(i), tagInfoObject);
     }
     mainObject.insert("tagsInfo", tagsInfoObject);
 
@@ -752,7 +780,7 @@ void MainWindow::exportDB() {
         tagObject.insert("ID_Movie", QJsonValue::fromVariant(tagsQuery.value(0).toInt()));
         tagObject.insert("Tag", QJsonValue::fromVariant(tagsQuery.value(1).toString()));
 
-        tagsObject.insert("tag" + QString::fromStdString(std::to_string(i)), tagObject);
+        tagsObject.insert("tag" + QString::number(i), tagObject);
     }
     mainObject.insert("tags", tagsObject);
 
