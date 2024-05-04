@@ -1200,7 +1200,7 @@ void MainWindow::openAbout() {
 
 void MainWindow::on_whatsnewAct_triggered() {
     if(ChangelogDialog::instancesCount() == 0) {
-        ChangelogDialog* window = new ChangelogDialog(this);
+        ChangelogDialog* window = new ChangelogDialog(m_savepath, this);
         window->show();
         if(window->exec() == 0) {
 
@@ -1698,6 +1698,7 @@ void MainWindow::CheckForUpdates(bool bManualTrigger)
         {
             Common::Log->append(tr("Unable to fetch last version: %1").arg(reply->errorString()), eLog::Error);
         }
+        reply->deleteLater();
     });
 }
 

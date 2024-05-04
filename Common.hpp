@@ -46,6 +46,7 @@ public:
     static bool isThemeBright(enum eTheme);
 
     static QString getVersion();
+    static QString getPreviousVersion();
 
     static void LogDatabaseError(QSqlQuery *query);
 };

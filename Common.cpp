@@ -256,6 +256,11 @@ QString Common::getVersion() {
     return "1.2.1";
 }
 
+QString Common::getPreviousVersion()
+{
+    return "1.2.0";
+}
+
 void Common::LogDatabaseError(QSqlQuery *query) {
     QString sLog = QObject::tr("Database error: %1\nQuery: %2").arg(query->lastError().text(), query->executedQuery());
     Common::Log->append(sLog, eLog::Error);

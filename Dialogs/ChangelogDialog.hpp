@@ -4,6 +4,11 @@
 #include <QDialog>
 #include <QFile>
 #include <QLabel>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 
 #include "Common.hpp"
 
@@ -18,15 +23,17 @@ class ChangelogDialog : public QDialog
     private:
         Ui::ChangelogDialog* m_ui;
         static int m_instances;
+        QByteArray m_responseByteArray;
+        QString m_pSavepath;
 
     public:
-        explicit ChangelogDialog(QWidget *parent = nullptr);
+        explicit ChangelogDialog(QString sSavepath, QWidget *parent = nullptr);
         ~ChangelogDialog();
 
         static int instancesCount();
 
     public slots:
-        void loadHTML();
+        void LoadLastCommits();
 
 };
 
