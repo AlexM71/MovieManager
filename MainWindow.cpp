@@ -603,41 +603,121 @@ void MainWindow::importDB()
             return;
         }
 
-        int answer = QMessageBox::question(this, tr("Import"), tr("This operation will remove all actual views, do you want to continue?"));
-        if (answer == QMessageBox::Yes) {
+        QString sVersionJson = main.value("version").toString();
 
+        // For now, only same Json with same version as the soft are imported
+        if(Common::getVersion() != sVersionJson)
+        {
+            QMessageBox::critical(this, tr("Error"), tr("Json version is too old (Json: %1, expected: %2)").arg(sVersionJson, Common::getVersion()));
+            return;
+        }
+
+        int answer = QMessageBox::question(this, tr("Import"), tr("This operation will remove all actual data, do you want to continue?"));
+        if (answer == QMessageBox::Yes)
+        {
             QSqlQuery deleteQuery;
-            if(!deleteQuery.exec("DELETE FROM movies"))
+            if(!deleteQuery.exec("DROP TABLE IF EXISTS columns"))
                 Common::LogDatabaseError(&deleteQuery);
-            if(!deleteQuery.exec("DELETE FROM views"))
+            if(!deleteQuery.exec("DROP TABLE IF EXISTS movies"))
                 Common::LogDatabaseError(&deleteQuery);
-            if(!deleteQuery.exec("DELETE FROM tags"))
+            if(!deleteQuery.exec("DROP TABLE IF EXISTS tags"))
                 Common::LogDatabaseError(&deleteQuery);
-            if(!deleteQuery.exec("DELETE FROM tagsInfo"))
+            if(!deleteQuery.exec("DROP TABLE IF EXISTS tagsInfo"))
+                Common::LogDatabaseError(&deleteQuery);
+            if(!deleteQuery.exec("DROP TABLE IF EXISTS version"))
+                Common::LogDatabaseError(&deleteQuery);
+            if(!deleteQuery.exec("DROP TABLE IF EXISTS views"))
                 Common::LogDatabaseError(&deleteQuery);
 
-            foreach(const QString& mainKey, main.keys()) {
-                if(mainKey == "movies") {
-                    QJsonObject movies = main.value(mainKey).toObject();
-                    foreach(const QString& movieKey, movies.keys()) {
-                        QJsonObject movie = movies.value(movieKey).toObject();
+            CreateTables();
+
+            QStringList sColumnList;
+            QList<enum eColumnType> eColumnTypeList;
+
+            foreach(const QString& mainKey, main.keys())
+            {
+                if(mainKey == "columns")
+                {
+                    QJsonArray columns = main.value(mainKey).toArray();
+
+                    for(int nColumn = 0; nColumn < columns.size(); nColumn++)
+                    {
+                        QJsonObject column = columns.at(nColumn).toObject();
+
+                        if(CheckImportFields(column, {"Name", "Type", "Min", "Max", "Precision", "TextMaxLength", "Optional"}) == false)
+                            continue;
+
+                        sColumnList.append(column["Name"].toString());
+                        eColumnTypeList.append((enum eColumnType)column["Type"].toInt());
+
                         QSqlQuery query;
-                        query.prepare("INSERT INTO movies (ID, Name, ReleaseYear, Rating, Poster) VALUES (?,?,?,?,?);");
+                        query.prepare("INSERT INTO columns (Name, Type, Min, Max, Precision, TextMaxLength, Optional) VALUES (?,?,?,?,?,?,?);");
+                        query.bindValue(0, column["Name"].toString());
+                        query.bindValue(1, column["Type"].toInt());
+                        query.bindValue(2, column["Min"].toDouble());
+                        query.bindValue(3, column["Max"].toDouble());
+                        query.bindValue(4, column["Precision"].toInt());
+                        query.bindValue(5, column["TextMaxLength"].toInt());
+                        query.bindValue(6, column["Optional"].toInt());
+
+                        if(!query.exec()){
+                            Common::LogDatabaseError(&query);
+                        }
+
+                        Common::AddColumnToMovieTable(column["Name"].toString(), (enum eColumnType)column["Type"].toInt());
+                    }
+                }
+
+                else if(mainKey == "movies")
+                {
+                    QJsonArray movies = main.value(mainKey).toArray();
+
+                    for(int nMovie = 0; nMovie < movies.size(); nMovie++)
+                    {
+                        QJsonObject movie = movies.at(nMovie).toObject();
+
+                        if(CheckImportFields(movie, {"ID", "Name", "ReleaseYear", "Rating", "Poster"}) == false)
+                            continue;
+
+                        QSqlQuery query;
+                        QString sQuery = "INSERT INTO movies (ID, Name, ReleaseYear, Rating, Poster, " + sColumnList.join(", ") + ") VALUES (?,?,?,?,?";
+                        for(int nColumn = 0; nColumn < sColumnList.size(); nColumn++)
+                            sQuery += ",?";
+                        sQuery += ");";
+
+                        query.prepare(sQuery);
                         query.bindValue(0, movie["ID"].toInt());
                         query.bindValue(1, movie["Name"].toString());
                         query.bindValue(2, movie["ReleaseYear"].toInt());
                         query.bindValue(3, movie["Rating"].toInt());
                         query.bindValue(4, movie["Poster"].toString());
+                        for(int nColumn = 0; nColumn < sColumnList.size(); nColumn++)
+                        {
+                            if(eColumnTypeList[nColumn] == eColumnType::Text)
+                                query.bindValue(5 + nColumn, movie[sColumnList[nColumn]].toString());
+                            else if(eColumnTypeList[nColumn] == eColumnType::Integer)
+                                query.bindValue(5 + nColumn, movie[sColumnList[nColumn]].toInt());
+                            else if(eColumnTypeList[nColumn] == eColumnType::Double)
+                                query.bindValue(5 + nColumn, movie[sColumnList[nColumn]].toDouble());
+                        }
 
                         if(!query.exec()){
                             Common::LogDatabaseError(&query);
                         }
                     }
                 }
-                else if(mainKey == "views") {
-                    QJsonObject views = main.value(mainKey).toObject();
-                    foreach(const QString& viewKey, views.keys()) {
-                        QJsonObject view = views.value(viewKey).toObject();
+
+                else if(mainKey == "views")
+                {
+                    QJsonArray views = main.value(mainKey).toArray();
+
+                    for(int nView = 0; nView < views.size(); nView++)
+                    {
+                        QJsonObject view = views.at(nView).toObject();
+
+                        if(CheckImportFields(view, {"ID", "ID_Movie", "ViewDate", "ViewType"}) == false)
+                            continue;
+
                         QSqlQuery query;
                         query.prepare("INSERT INTO views (ID, ID_Movie, ViewDate, ViewType) VALUES (?,?,?,?);");
                         query.bindValue(0, view["ID"].toInt());
@@ -650,10 +730,18 @@ void MainWindow::importDB()
                         }
                     }
                 }
-                else if(mainKey == "tags") {
-                    QJsonObject tags = main.value(mainKey).toObject();
-                    foreach(const QString& tagKey, tags.keys()) {
-                        QJsonObject tag = tags.value(tagKey).toObject();
+
+                else if(mainKey == "tags")
+                {
+                    QJsonArray tags = main.value(mainKey).toArray();
+
+                    for(int nTag = 0; nTag < tags.size(); nTag++)
+                    {
+                        QJsonObject tag = tags.at(nTag).toObject();
+
+                        if(CheckImportFields(tag, {"ID_Movie", "Tag"}) == false)
+                            continue;
+
                         QSqlQuery query;
                         query.prepare("INSERT INTO tags (ID_Movie, Tag) VALUES (?,?);");
                         query.bindValue(0, tag["ID_Movie"].toInt());
@@ -664,10 +752,18 @@ void MainWindow::importDB()
                         }
                     }
                 }
-                else if(mainKey == "tagsInfo") {
-                    QJsonObject tagsInfo = main.value(mainKey).toObject();
-                    foreach(const QString& tagInfoKey, tagsInfo.keys()) {
-                        QJsonObject tagInfo = tagsInfo.value(tagInfoKey).toObject();
+
+                else if(mainKey == "tagsInfo")
+                {
+                    QJsonArray tagsInfo = main.value(mainKey).toArray();
+
+                    for(int nTagInfo = 0; nTagInfo < tagsInfo.size(); nTagInfo++)
+                    {
+                        QJsonObject tagInfo = tagsInfo.at(nTagInfo).toObject();
+
+                        if(CheckImportFields(tagInfo, {"Tag", "Color"}) == false)
+                            continue;
+
                         QSqlQuery query;
                         query.prepare("INSERT INTO tagsInfo (Tag, Color) VALUES (?,?);");
                         query.bindValue(0, tagInfo["Tag"].toString());
@@ -681,6 +777,7 @@ void MainWindow::importDB()
             }
         }
     }
+
     fillTable();
     fillGlobalStats();
 }
@@ -706,16 +803,40 @@ void MainWindow::exportDB()
     }
 
     QJsonObject mainObject;
+    QStringList sColumnList;
+    QList<enum eColumnType> eColumnTypeList;
+
+    // Writes columns to JSON
+    QJsonArray columnArray;
+    QSqlQuery columnQuery;
+    if(!columnQuery.exec("SELECT Name, Type, Min, Max, Precision, TextMaxLength, Optional FROM columns;"))
+        Common::LogDatabaseError(&columnQuery);
+    while(columnQuery.next())
+    {
+        QJsonObject columnObject;
+
+        sColumnList.append(columnQuery.value(0).toString());
+        eColumnTypeList.append((enum eColumnType)columnQuery.value(0).toInt());
+
+        columnObject.insert("Name", QJsonValue::fromVariant(columnQuery.value(0).toString()));
+        columnObject.insert("Type", QJsonValue::fromVariant(columnQuery.value(1).toInt()));
+        columnObject.insert("Min", QJsonValue::fromVariant(columnQuery.value(2).toDouble()));
+        columnObject.insert("Max", QJsonValue::fromVariant(columnQuery.value(3).toDouble()));
+        columnObject.insert("Precision", QJsonValue::fromVariant(columnQuery.value(4).toInt()));
+        columnObject.insert("TextMaxLength", QJsonValue::fromVariant(columnQuery.value(5).toInt()));
+        columnObject.insert("Optional", QJsonValue::fromVariant(columnQuery.value(6).toInt()));
+
+        columnArray.append(columnObject);
+    }
+    mainObject.insert("columns", columnArray);
 
     //Writes movies to JSON
-    QJsonObject moviesObject;
+    QJsonArray moviesArray;
     QSqlQuery moviesQuery;
-    if(!moviesQuery.exec("SELECT ID, Name, ReleaseYear, Rating, Poster FROM movies;"))
+    if(!moviesQuery.exec("SELECT ID, Name, ReleaseYear, Rating, Poster, " + sColumnList.join(", ") + " FROM movies;"))
         Common::LogDatabaseError(&moviesQuery);
-    int i=0;
-    while(moviesQuery.next()) {
-        i++;
-
+    while(moviesQuery.next())
+    {
         QJsonObject movieObject;
 
         movieObject.insert("ID", QJsonValue::fromVariant(moviesQuery.value(0).toInt()));
@@ -723,20 +844,27 @@ void MainWindow::exportDB()
         movieObject.insert("ReleaseYear", QJsonValue::fromVariant(moviesQuery.value(2).toInt()));
         movieObject.insert("Rating", QJsonValue::fromVariant(moviesQuery.value(3).toInt()));
         movieObject.insert("Poster", QJsonValue::fromVariant(moviesQuery.value(4).toString()));
+        for(int i = 0; i < sColumnList.size(); i++)
+        {
+            if(eColumnTypeList[i] == eColumnType::Text)
+                movieObject.insert(sColumnList[i], QJsonValue::fromVariant(moviesQuery.value(5 + i).toString()));
+            else if(eColumnTypeList[i] == eColumnType::Integer)
+                movieObject.insert(sColumnList[i], QJsonValue::fromVariant(moviesQuery.value(5 + i).toInt()));
+            else if(eColumnTypeList[i] == eColumnType::Double)
+                movieObject.insert(sColumnList[i], QJsonValue::fromVariant(moviesQuery.value(5 + i).toDouble()));
+        }
 
-        moviesObject.insert("movie" + QString::number(i), movieObject);
+        moviesArray.append(movieObject);
     }
-    mainObject.insert("movies", moviesObject);
+    mainObject.insert("movies", moviesArray);
 
     //Writes views to JSON
-    QJsonObject viewsObject;
+    QJsonArray viewsArray;
     QSqlQuery viewsQuery;
     if(!viewsQuery.exec("SELECT ID, ID_Movie, ViewDate, ViewType FROM views;"))
         Common::LogDatabaseError(&viewsQuery);
-    i=0;
-    while(viewsQuery.next()) {
-        i++;
-
+    while(viewsQuery.next())
+    {
         QJsonObject viewObject;
 
         viewObject.insert("ID", QJsonValue::fromVariant(viewsQuery.value(0).toInt()));
@@ -744,45 +872,49 @@ void MainWindow::exportDB()
         viewObject.insert("ViewDate", QJsonValue::fromVariant(viewsQuery.value(2).toString()));
         viewObject.insert("ViewType", QJsonValue::fromVariant(viewsQuery.value(3).toString()));
 
-        viewsObject.insert("view" + QString::number(i), viewObject);
+        viewsArray.append(viewObject);
     }
-    mainObject.insert("views", viewsObject);
+    mainObject.insert("views", viewsArray);
 
     //Writes tagsInfo to JSON
-    QJsonObject tagsInfoObject;
+    QJsonArray tagsInfoArray;
     QSqlQuery tagsInfoQuery;
     if(!tagsInfoQuery.exec("SELECT Tag, Color FROM tagsInfo;"))
         Common::LogDatabaseError(&tagsInfoQuery);
-    i=0;
-    while(tagsInfoQuery.next()) {
-        i++;
-
+    while(tagsInfoQuery.next())
+    {
         QJsonObject tagInfoObject;
 
         tagInfoObject.insert("Tag", QJsonValue::fromVariant(tagsInfoQuery.value(0).toString()));
         tagInfoObject.insert("Color", QJsonValue::fromVariant(tagsInfoQuery.value(1).toString()));
 
-        tagsInfoObject.insert("tagInfo" + QString::number(i), tagInfoObject);
+        tagsInfoArray.append(tagInfoObject);
     }
-    mainObject.insert("tagsInfo", tagsInfoObject);
+    mainObject.insert("tagsInfo", tagsInfoArray);
 
     //Writes tags to JSON
-    QJsonObject tagsObject;
+    QJsonArray tagsArray;
     QSqlQuery tagsQuery;
     if(!tagsQuery.exec("SELECT ID_Movie, Tag FROM tags;"))
         Common::LogDatabaseError(&tagsQuery);
-    i=0;
-    while(tagsQuery.next()) {
-        i++;
-
+    while(tagsQuery.next())
+    {
         QJsonObject tagObject;
 
         tagObject.insert("ID_Movie", QJsonValue::fromVariant(tagsQuery.value(0).toInt()));
         tagObject.insert("Tag", QJsonValue::fromVariant(tagsQuery.value(1).toString()));
 
-        tagsObject.insert("tag" + QString::number(i), tagObject);
+        tagsArray.append(tagObject);
     }
-    mainObject.insert("tags", tagsObject);
+    mainObject.insert("tags", tagsArray);
+
+    // Writes version to JSON
+    QJsonObject versionObject;
+    QSqlQuery versionQuery;
+    if(!versionQuery.exec("SELECT Version from version;"))
+        Common::LogDatabaseError(&versionQuery);
+    versionQuery.first();
+    mainObject.insert("version", QJsonValue::fromVariant(versionQuery.value(0).toString()));
 
     jsonFile.write(QJsonDocument(mainObject).toJson(QJsonDocument::Indented));
     jsonFile.close();
@@ -1294,27 +1426,7 @@ void MainWindow::openSettings() {
         columnsQuery.previous();
         while(columnsQuery.next()) {
             if(sExistingColumns.contains(columnsQuery.value(0).toString()) == false) {
-                QSqlQuery addColumnToTable;
-                QString sRequest = "ALTER TABLE movies ADD COLUMN \"" + columnsQuery.value(0).toString() + "\" ";
-                switch(columnsQuery.value(1).toInt()) {
-                case 0:
-                    sRequest.append("INTEGER");
-                    break;
-                case 1:
-                    sRequest.append("REAL");
-                    break;
-                case 2:
-                    sRequest.append("TEXT");
-                    break;
-                default:
-                    Common::Log->append(tr("Unknown column type, can't add column %1 to movies table").arg(columnsQuery.value(0).toString()), eLog::Error);
-                    break;
-                }
-
-                if(!addColumnToTable.exec(sRequest))
-                    Common::LogDatabaseError(&addColumnToTable);
-                else
-                    Common::Log->append(tr("Column %1 successfully added to movies table").arg(columnsQuery.value(0).toString()), eLog::Success);
+                Common::AddColumnToMovieTable(columnsQuery.value(0).toString(), (enum eColumnType) columnsQuery.value(1).toInt());
             }
         }
 
@@ -1755,4 +1867,16 @@ void MainWindow::openMemories()
         messageBox.exec();
     }
     delete window;
+}
+
+bool MainWindow::CheckImportFields(QJsonObject object, QStringList sFields)
+{
+    for(const QString &sField : sFields)
+    {
+        if(object[sField] == QJsonValue::Undefined || object[sField] == QJsonValue::Null)
+        {
+            return false;
+        }
+    }
+    return true;
 }

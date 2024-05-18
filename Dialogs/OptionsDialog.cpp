@@ -188,4 +188,3 @@ void OptionsDialog::InsertColumnDB(struct stColumn* stColumnToInsert) {
         return;
     }
 }
-

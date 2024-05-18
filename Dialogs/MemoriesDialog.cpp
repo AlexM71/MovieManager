@@ -64,7 +64,6 @@ void MemoriesDialog::GetEphemeris()
             movie.sPosterPath = query.value(2).toString();
             movie.nYear->append(query.value(3).toInt());
             movie.display = (enum eDisplay)(rand() % 3);
-            movie.display = eDisplay::ViewedXTimes;
 
             m_movies->append(movie);
         }

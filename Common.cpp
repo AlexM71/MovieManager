@@ -266,3 +266,27 @@ void Common::LogDatabaseError(QSqlQuery *query) {
     Common::Log->append(sLog, eLog::Error);
 }
 
+void Common::AddColumnToMovieTable(QString sColumnName, enum eColumnType eType)
+{
+    QSqlQuery addColumnToTable;
+    QString sRequest = "ALTER TABLE movies ADD COLUMN \"" + sColumnName + "\" ";
+    switch(eType) {
+    case eColumnType::Integer:
+        sRequest.append("INTEGER");
+        break;
+    case eColumnType::Double:
+        sRequest.append("REAL");
+        break;
+    case eColumnType::Text:
+        sRequest.append("TEXT");
+        break;
+    default:
+        Common::Log->append(QObject::tr("Unknown column type, can't add column %1 to movies table").arg(sColumnName), eLog::Error);
+        break;
+    }
+
+    if(!addColumnToTable.exec(sRequest))
+        Common::LogDatabaseError(&addColumnToTable);
+    else
+        Common::Log->append(QObject::tr("Column %1 successfully added to movies table").arg(sColumnName), eLog::Success);
+}

@@ -83,6 +83,7 @@ class MainWindow : public QMainWindow {
         void closeEvent(QCloseEvent *event);
         void deleteMovie(int nMovieID);
         void CheckDatabaseVersion();
+        bool CheckImportFields(QJsonObject object, QStringList sFields);
         ~MainWindow();
 
     public slots:

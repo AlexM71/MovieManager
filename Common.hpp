@@ -49,6 +49,8 @@ public:
     static QString getPreviousVersion();
 
     static void LogDatabaseError(QSqlQuery *query);
+
+    static void AddColumnToMovieTable(QString sColumnName, enum eColumnType eType);
 };
 
 #endif // COMMON_HPP
