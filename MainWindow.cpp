@@ -1831,10 +1831,10 @@ QString MainWindow::getDatabaseVersion()
 void MainWindow::CheckDatabaseVersion()
 {
     QString sDatabaseVersion = getDatabaseVersion();
+    QSqlQuery query;
 
     if(sDatabaseVersion == "1.2.0")
     {
-        QSqlQuery query;
         if(!query.exec("ALTER TABLE Columns ADD COLUMN Optional INTEGER;"))
             Common::LogDatabaseError(&query);
 
@@ -1844,6 +1844,15 @@ void MainWindow::CheckDatabaseVersion()
             Common::LogDatabaseError(&query);
         sDatabaseVersion = "1.2.1";
         Common::Log->append(tr("Database Migrated from version 1.2.0 to 1.2.1"), eLog::Success);
+    }
+    if(sDatabaseVersion == "1.2.1")
+    {
+        if(!query.exec("DELETE FROM version;"))
+            Common::LogDatabaseError(&query);
+        if(!query.exec("INSERT INTO Version (Version) VALUES (\"1.3.0\");"))
+            Common::LogDatabaseError(&query);
+        sDatabaseVersion = "1.3.0";
+        Common::Log->append(tr("Database Migrated from version 1.2.1 to 1.3.0"), eLog::Success);
     }
 }
 
