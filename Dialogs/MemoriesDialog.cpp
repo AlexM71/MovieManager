@@ -17,6 +17,8 @@ MemoriesDialog::MemoriesDialog(QString sSavePath, QWidget *parent) : QDialog(par
 
     GetEphemeris();
 
+    this->setFixedSize(360,480);
+
     if(m_movies->size() == 0)
     {
         this->done(-1);
@@ -122,7 +124,12 @@ void MemoriesDialog::AddMovieOverlay(QPixmap* pixmap)
 
     painter.setFont(QFont("Arial", 20));
     painter.setPen(Qt::white);
-    painter.drawText(QRect(0, this->height() - 115, this->width(), this->height()+500), Qt::AlignHCenter, m_movies->at(m_displayedIndex).sName);
+
+    // Add '...' if title is too long
+    QFontMetrics fm(painter.font());
+    QString sTitle = fm.elidedText(m_movies->at(m_displayedIndex).sName, Qt::ElideRight, this->width());
+
+    painter.drawText(QRect(0, this->height() - 115, this->width(), this->height()+500), Qt::AlignHCenter, sTitle);
 
     QString sText = "";
     switch(m_movies->at(m_displayedIndex).display)

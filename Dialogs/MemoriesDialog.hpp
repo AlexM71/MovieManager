@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QWheelEvent>
 #include <QPropertyAnimation>
+#include <QFontMetrics>
 
 #include "Common.hpp"
 
